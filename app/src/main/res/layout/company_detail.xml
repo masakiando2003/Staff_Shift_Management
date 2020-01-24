@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AccountSettingActivity">
+
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginBottom="132dp"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txtCompanyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="40dp"
+        android:ems="10"
+        android:hint="@string/companyName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="@string/email"
+        app:layout_constraintEnd_toEndOf="@+id/lblCompanyName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/lblCompanyName"
+        app:layout_constraintTop_toBottomOf="@+id/lblCompanyName" />
+
+    <TextView
+        android:id="@+id/lblTel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:text="@string/tel"
+        app:layout_constraintEnd_toEndOf="@+id/lblEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/lblEmail"
+        app:layout_constraintTop_toBottomOf="@+id/lblEmail" />
+
+    <TextView
+        android:id="@+id/lblCompanyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/companyName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="40dp"
+        android:ems="10"
+        android:hint="@string/tel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+
+    <TextView
+        android:id="@+id/txtCompanyDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="36dp"
+        android:ems="10"
+        android:hint="@string/companyDesc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTel" />
+
+    <TextView
+        android:id="@+id/lblCompanyDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="92dp"
+        android:text="@string/password"
+        app:layout_constraintEnd_toEndOf="@+id/lblTel"
+        app:layout_constraintHorizontal_bias="0.783"
+        app:layout_constraintStart_toStartOf="@+id/lblTel"
+        app:layout_constraintTop_toBottomOf="@+id/lblTel" />
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="40dp"
+        android:ems="10"
+        android:hint="@string/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCompanyName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
