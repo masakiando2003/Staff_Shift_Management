@@ -1,17 +1,21 @@
 package jp.ac.dhw.a18dc593.staffshiftmanagement
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
 
     val myPREFERENCES = "MyPrefs"
-    val emailKey = "emailKey"
     var sharedpreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,8 +24,11 @@ class MainActivity : AppCompatActivity() {
 
         sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
         if(!sharedpreferences!!.contains("email")){
-
+            val loginIntent = Intent(this, LogInActivity::class.java)
+            startActivity(loginIntent)
         }
+
+        auth = FirebaseAuth.getInstance()
 
         val layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(this)
@@ -37,5 +44,27 @@ class MainActivity : AppCompatActivity() {
         )
         mainMenuRecyclerView.addItemDecoration(itemDecoration)
 
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        auth.signInAnonymously()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInAnonymously:success")
+                    val user = auth.currentUser
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInAnonymously:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+        // [END signin_anonymously]
+    }
+
+    companion object {
+        private const val TAG = "AnonymousAuth"
     }
 }

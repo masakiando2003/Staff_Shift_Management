@@ -19,7 +19,9 @@
         <activity android:name=".AccountSettingActivity"></activity>
         <activity android:name=".CompanyDetailActivity"></activity>
         <activity android:name=".CreateShiftActivity"></activity>
-        <activity android:name=".LogoutActivity"></activity>
+        <activity android:name=".UserListActivity"></activity>
+        <activity android:name=".LogInActivity"></activity>
+        <activity android:name=".ShiftListActivity"></activity>
     </application>
 
 </manifest>

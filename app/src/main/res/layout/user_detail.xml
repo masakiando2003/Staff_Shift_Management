@@ -72,7 +72,7 @@
         android:ems="10"
         android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtCompanyEmail" />
 
     <TextView
         android:id="@+id/txtRole"
@@ -85,7 +85,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     <TextView
-        android:id="@+id/txtEmail"
+        android:id="@+id/txtCompanyEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"

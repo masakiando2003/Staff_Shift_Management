@@ -40,6 +40,19 @@
         app:layout_constraintStart_toStartOf="@+id/lblAttendDate"
         app:layout_constraintTop_toBottomOf="@+id/lblAttendDate" />
 
+
+    <TextView
+        android:id="@+id/lblEndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/endTime"
+        app:layout_constraintEnd_toEndOf="@+id/lblAttendTime"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/lblAttendTime"
+        app:layout_constraintTop_toBottomOf="@+id/lblAttendTime" />
+
     <TextView
         android:id="@+id/lblMemo"
         android:layout_width="wrap_content"
@@ -47,34 +60,34 @@
         android:layout_marginTop="80dp"
         android:text="@string/memo"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/lblAttendTime"
+        app:layout_constraintEnd_toEndOf="@+id/lblEndTime"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/lblAttendTime"
-        app:layout_constraintTop_toBottomOf="@+id/lblAttendTime"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:text="@string/back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblMemo"
-        app:layout_constraintVertical_bias="0.282" />
+        app:layout_constraintStart_toStartOf="@+id/lblEndTime"
+        app:layout_constraintTop_toBottomOf="@+id/lblEndTime"
+        app:layout_constraintVertical_bias="0.021" />
 
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="80dp"
         android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.893"
+        app:layout_constraintHorizontal_bias="0.903"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
         app:layout_constraintTop_toBottomOf="@+id/txtMemo" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblMemo"
+        app:layout_constraintVertical_bias="0.516" />
 
     <TextView
         android:id="@+id/txtUserName"
@@ -83,22 +96,23 @@
         android:layout_marginTop="100dp"
         android:layout_marginEnd="72dp"
         android:ems="10"
+        android:autofillHints="@string/userName"
         android:hint="@string/userName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/lblUserName"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <EditText
         android:id="@+id/txtAttendTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="48dp"
         android:autofillHints="@string/attendTime"
-        android:hint="@string/attendTime"
         android:ems="10"
-        android:inputType="time"
+        android:hint="@string/attendTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAttendDate" />
 
@@ -107,8 +121,7 @@
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="88dp"
-        android:autofillHints="@string/delete"
+        android:layout_marginBottom="16dp"
         android:text="@string/delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -119,27 +132,37 @@
         android:id="@+id/txtAttendDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="36dp"
         android:autofillHints="@string/attendDate"
-        android:hint="@string/attendDate"
         android:ems="10"
-        android:inputType="date"
+        android:hint="@string/attendDate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toEndOf="@+id/lblAttendDate"
         app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
 
     <EditText
-        android:id="@+id/txtMemo"
+        android:id="@+id/txtEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="48dp"
+        android:autofillHints="@string/attendTime"
+        android:ems="10"
+        android:hint="@string/endTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtAttendTime" />
+
+    <EditText
+        android:id="@+id/txtMemo"
+        android:layout_width="214dp"
+        android:layout_height="104dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="140dp"
+        android:autofillHints="@string/memo"
         android:ems="10"
         android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:autofillHints="@string/memo"
         android:hint="@string/memo"
         app:layout_constraintStart_toEndOf="@+id/lblMemo"
         app:layout_constraintTop_toBottomOf="@+id/txtAttendTime" />

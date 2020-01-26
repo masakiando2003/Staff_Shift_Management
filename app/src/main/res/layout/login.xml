@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:text="@string/shift_system"
-        app:layout_constraintBottom_toTopOf="@+id/txtEmail"
+        app:layout_constraintBottom_toTopOf="@+id/txtCompanyEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,11 +19,11 @@
         android:textSize="32sp"/>
 
     <EditText
-        android:id="@+id/txtEmail"
+        android:id="@+id/txtCompanyEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginTop="192dp"
+        android:layout_marginEnd="24dp"
         android:autofillHints="@string/email"
         android:ems="10"
         android:hint="@string/email"
@@ -35,14 +35,13 @@
         android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="60dp"
         android:autofillHints="@string/password"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/txtEmail"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        app:layout_constraintStart_toStartOf="@+id/txtCompanyEmail"
+        app:layout_constraintTop_toBottomOf="@+id/txtCompanyEmail" />
 
     <TextView
         android:id="@+id/lblEmail"
@@ -61,10 +60,10 @@
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.587" />
+        app:layout_constraintVertical_bias="0.73" />
 
     <TextView
         android:id="@+id/lblPassword"

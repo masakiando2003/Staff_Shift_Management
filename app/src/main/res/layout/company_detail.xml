@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginBottom="132dp"
+        android:layout_marginBottom="56dp"
         android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtTel"
+        android:id="@+id/txtCompanyTel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
@@ -69,18 +69,18 @@
         android:ems="10"
         android:hint="@string/tel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtCompanyEmail" />
 
     <TextView
         android:id="@+id/txtCompanyDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="170dp"
+        android:layout_height="215dp"
         android:layout_marginTop="92dp"
         android:layout_marginEnd="36dp"
         android:ems="10"
         android:hint="@string/companyDesc"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTel" />
+        app:layout_constraintTop_toBottomOf="@+id/txtCompanyTel" />
 
     <TextView
         android:id="@+id/lblCompanyDesc"
@@ -88,14 +88,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_marginTop="92dp"
-        android:text="@string/password"
+        android:text="@string/companyDesc"
         app:layout_constraintEnd_toEndOf="@+id/lblTel"
         app:layout_constraintHorizontal_bias="0.783"
         app:layout_constraintStart_toStartOf="@+id/lblTel"
         app:layout_constraintTop_toBottomOf="@+id/lblTel" />
 
     <TextView
-        android:id="@+id/txtEmail"
+        android:id="@+id/txtCompanyEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"

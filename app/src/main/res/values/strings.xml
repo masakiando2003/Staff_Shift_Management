@@ -11,10 +11,12 @@
     <string name="login">ログイン</string>
     <string name="back">戻る</string>
     <string name="submit">登録</string>
+    <string name="edit">編集</string>
     <string name="update">更新</string>
     <string name="delete">削除</string>
     <string name="attendDate">出勤日</string>
     <string name="attendTime">出勤時間</string>
+    <string name="endTime">終了時間</string>
     <string name="memo">メモ</string>
     <string name="notification">通知</string>
     <string name="notification_time">通知時間</string>
@@ -37,5 +39,14 @@
         <item>12時間前</item>
         <item>24時間前</item>
         <item>48時間前</item>
+    </string-array>
+    <string-array name="users_array">
+        <item>User1</item>
+        <item>User2</item>
+        <item>User3</item>
+    </string-array>
+    <string-array name="user_action_array">
+        <item>編集</item>
+        <item>削除</item>
     </string-array>
 </resources>
