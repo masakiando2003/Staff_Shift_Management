@@ -26,6 +26,7 @@ class LogInActivity : AppCompatActivity() {
     val emailKey = "email"
     val passwordKey = "password"
     val loginUserName = "loginUserName"
+    val loginUserID = "loginUserID"
     var sharedpreferences: SharedPreferences? = null
     private lateinit var auth: FirebaseAuth
     private lateinit var UserInfoRef: DatabaseReference
@@ -60,6 +61,11 @@ class LogInActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT).show()
 
                             // アカウントの情報をsession(sharedPreferences)に保存する
+                            sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
+                            val editor2 = sharedpreferences!!.edit()
+
+                            editor2.putString(emailKey, email)
+                            editor2.putString(passwordKey, password)
                             dbRef = FirebaseDatabase.getInstance().reference
                             UserInfoRef = dbRef.child("users")
                             UserInfoListener = object : ValueEventListener {
@@ -71,18 +77,13 @@ class LogInActivity : AppCompatActivity() {
                                     Log.d(TAG, "Number of messages: ${dataSnapshot.childrenCount}")
                                     dataSnapshot.children.forEach { child ->
                                         if(child.child("email").value == email){
-                                            sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
-                                            val editor2 = sharedpreferences!!.edit()
-
-                                            editor2.putString(emailKey, email)
-                                            editor2.putString(passwordKey, password)
                                             editor2.putString(loginUserName, child.key)
-                                            editor2.apply()
-
-                                            val intent = Intent(this@LogInActivity, MainActivity::class.java)
-                                            startActivity(intent)
+                                            editor2.putString(loginUserID, child.child("userID").value.toString())
                                         }
                                     }
+                                    editor2.apply()
+                                    val intent = Intent(this@LogInActivity, MainActivity::class.java)
+                                    startActivity(intent)
                                 }
 
                                 override fun onCancelled(error: DatabaseError) {
