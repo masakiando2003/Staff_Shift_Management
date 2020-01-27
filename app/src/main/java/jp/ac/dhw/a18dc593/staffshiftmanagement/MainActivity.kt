@@ -5,11 +5,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         if(!sharedpreferences!!.contains("email")){
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
+        }
+        if(sharedpreferences!!.contains("loginUserName")){
+            var loginUserStr = findViewById<TextView>(R.id.loginUser)
+            loginUserStr.text = "ログインユーザー: "+sharedpreferences!!.getString("loginUserName",null)
         }
 
         auth = FirebaseAuth.getInstance()
