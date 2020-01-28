@@ -40,8 +40,8 @@ class MainMenuItemsAdapter(val context:Context, val menuItems: List<MainMenuItem
                     intent = Intent(context, CompanyDetailActivity::class.java)
                 } else if(currentItem.toString().contains("ユーザーリスト")){
                     intent = Intent(context, UserListActivity::class.java)
-                } else if(currentItem.toString().contains("アカウント設定")) {
-                    intent = Intent(context, AccountSettingActivity::class.java)
+                } else if(currentItem.toString().contains("ユーザー登録")) {
+                    intent = Intent(context, UserRegisterActivity::class.java)
                 } else if(currentItem.toString().contains("ログアウト")) {
                     intent = Intent(context, LogInActivity::class.java)
                 }

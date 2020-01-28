@@ -8,7 +8,7 @@ object Supplier {
         MainMenuItems("出勤シフト登録"),
         MainMenuItems("会社情報"),
         MainMenuItems("ユーザーリスト"),
-        //MainMenuItems("アカウント設定"),
+        MainMenuItems("ユーザー登録"),
         MainMenuItems("ログアウト")
     )
 }
