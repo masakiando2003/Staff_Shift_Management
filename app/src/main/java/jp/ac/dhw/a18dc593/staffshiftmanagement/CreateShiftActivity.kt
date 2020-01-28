@@ -16,16 +16,16 @@ class CreateShiftActivity : AppCompatActivity() {
 
 
 
-        val btnBack = findViewById<Button>(R.id.btnBack)
+        val btnShiftEditBack = findViewById<Button>(R.id.btnShiftEditBack)
 
-        btnBack.setOnClickListener {
+        btnShiftEditBack.setOnClickListener {
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
         val btnSubmit = findViewById<Button>(R.id.btnSubmit)
 
-        btnBack.setOnClickListener {
+        btnSubmit.setOnClickListener {
             var submitFlag = false
 
             val userName = findViewById<TextView>(R.id.txtUserName).text.toString()

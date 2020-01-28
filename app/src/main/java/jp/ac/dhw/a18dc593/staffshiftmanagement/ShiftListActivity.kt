@@ -96,9 +96,9 @@ class ShiftListActivity : AppCompatActivity() {
         }
         shiftListRef.addValueEventListener(shiftListListener)
 
-        val btnBack = findViewById<Button>(R.id.btnBack)
+        val btnShiftListBack = findViewById<Button>(R.id.btnShiftListBack)
 
-        btnBack.setOnClickListener {
+        btnShiftListBack.setOnClickListener {
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

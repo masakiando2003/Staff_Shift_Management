@@ -11,14 +11,14 @@
         android:id="@+id/rvUserList"
         android:layout_width="406dp"
         android:layout_height="584dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnBack"
+        app:layout_constraintBottom_toTopOf="@+id/btnShiftListBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         android:overScrollMode="ifContentScrolls"/>
 
     <Button
-        android:id="@+id/btnBack"
+        android:id="@+id/btnUserListBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"

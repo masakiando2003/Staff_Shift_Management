@@ -71,9 +71,9 @@ class CompanyDetailActivity : AppCompatActivity() {
         }
         companyInfoRef.addValueEventListener(companyInfoListener)
 
-        val btnBack = findViewById<Button>(R.id.btnBack)
+        val btnCompanyDetailBack = findViewById<Button>(R.id.btnCompanyDetailBack)
 
-        btnBack.setOnClickListener {
+        btnCompanyDetailBack.setOnClickListener {
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

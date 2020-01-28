@@ -93,9 +93,9 @@ class UserListActivity : AppCompatActivity() {
         }
         companyInfoRef.addValueEventListener(companyInfoListener)
 
-        val btnBack = findViewById<Button>(R.id.btnUserRegitserBack)
+        val btnUserListBack = findViewById<Button>(R.id.btnUserListBack)
 
-        btnBack.setOnClickListener {
+        btnUserListBack.setOnClickListener {
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
