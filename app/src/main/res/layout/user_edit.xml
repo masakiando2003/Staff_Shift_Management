@@ -30,7 +30,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblRole"
-        app:layout_constraintVertical_bias="0.285" />
+        app:layout_constraintVertical_bias="0.297" />
 
     <TextView
         android:id="@+id/lblEmail"
@@ -146,7 +146,7 @@
         android:layout_marginTop="28dp"
         android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="@+id/spnRole"
-        app:layout_constraintHorizontal_bias="0.336"
+        app:layout_constraintHorizontal_bias="0.724"
         app:layout_constraintStart_toStartOf="@+id/spnRole"
         app:layout_constraintTop_toBottomOf="@+id/spnRole" />
 

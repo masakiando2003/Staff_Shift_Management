@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -63,12 +64,18 @@ class UserListActivity : AppCompatActivity() {
 
                 Log.d(UserListActivity.TAG, "Number of messages: ${dataSnapshot.childrenCount}")
                 dataSnapshot.children.forEach { child ->
+                    userRecyclerAdapter = null
+                    userRecyclerListView!!.setAdapter(userRecyclerAdapter)
+
                     val ParentUserDataItem: UserListItem
                     ParentUserDataItem = UserListItem()
                     ParentUserDataItem.userName=child.key!!.toString()
 
                     val UserActionItems = arrayListOf<UserActionItem>()
                     var UserActionItem: UserActionItem
+                    UserActionItem = UserActionItem()
+                    UserActionItem.actionName=ParentUserDataItem.userName+"のデータを見る"
+                    UserActionItems.add(UserActionItem)
                     UserActionItem = UserActionItem()
                     UserActionItem.actionName=ParentUserDataItem.userName+"を編集する"
                     UserActionItems.add(UserActionItem)
@@ -173,6 +180,13 @@ class UserListActivity : AppCompatActivity() {
                 } else {
                     val textViewClicked = view as TextView
                     val chosenAction = textViewClicked.text.toString()
+                    if(chosenAction.contains("見る")){
+                        val userArr = chosenAction.split("の")
+                        val userName = userArr[0]
+                        var intent = Intent(this@UserListActivity, UserDetailActivity::class.java)
+                        intent.putExtra("userName", userName)
+                        startActivity(intent)
+                    }
                     if(chosenAction.contains("編集")){
                         val userArr = chosenAction.split("を")
                         val userName = userArr[0]
@@ -182,7 +196,20 @@ class UserListActivity : AppCompatActivity() {
                     }
                     else if(chosenAction.contains("削除")){
                         val userArr = chosenAction.split("を")
-                        val userName = userArr[0].toString()
+                        val userName = userArr[0]
+                        AlertDialog.Builder(context) // FragmentではActivityを取得して生成
+                            .setTitle("注意!")
+                            .setMessage(userName+"を削除してもよろしいでしょうか?")
+                            .setPositiveButton("OK") { dialog, which ->
+                                databaseReference.child("users").child(userName).removeValue()
+                                Toast.makeText(context, "ユーザー: "+userName+" を削除しました",
+                                    Toast.LENGTH_SHORT).show()
+                                val intentRefresh = Intent(context, UserListActivity::class.java)
+                                startActivity(intentRefresh)
+                            }
+                            .setNegativeButton("No", { dialog, which ->
+                            })
+                            .show()
                     }
                 }
             }

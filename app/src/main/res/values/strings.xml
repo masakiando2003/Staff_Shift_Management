@@ -4,6 +4,7 @@
     <string name="loginUserName">ログインユーザー名</string>
     <string name="userName">ユーザー名</string>
     <string name="userList">ユーザーリスト</string>
+    <string name="userAvatar">ユーザーアバター</string>
     <string name="companyName">会社名</string>
     <string name="companyDesc">会社概要</string>
     <string name="email">メールアドレス</string>
