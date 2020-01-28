@@ -30,9 +30,9 @@ class UserListActivity : AppCompatActivity() {
     val myPREFERENCES = "MyPrefs"
     var sharedpreferences: SharedPreferences? = null
 
-    private lateinit var companyInfoRef: DatabaseReference
+    private lateinit var userListRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
-    private lateinit var companyInfoListener: ValueEventListener
+    private lateinit var userListListener: ValueEventListener
     
     private var userRecyclerListView: RecyclerView? = null
     private var userRecyclerAdapter: userListAdapter? = null
@@ -45,15 +45,6 @@ class UserListActivity : AppCompatActivity() {
 
         userRecyclerListView = findViewById(R.id.rvUserList) as RecyclerView
         val UserDataItems = arrayListOf<UserListItem>()
-        val UserActionItems = arrayListOf<UserActionItem>()
-
-        var UserActionItem: UserActionItem
-        UserActionItem = UserActionItem()
-        UserActionItem.actionName="編集"
-        UserActionItems.add(UserActionItem)
-        UserActionItem = UserActionItem()
-        UserActionItem.actionName="削除"
-        UserActionItems.add(UserActionItem)
 
         sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
         if(!sharedpreferences!!.contains("email")){
@@ -63,8 +54,8 @@ class UserListActivity : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
-        companyInfoRef = databaseReference.child("users")
-        companyInfoListener = object : ValueEventListener {
+        userListRef = databaseReference.child("users")
+        userListListener = object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // New data at this path. This method will be called after every change in the
@@ -75,6 +66,15 @@ class UserListActivity : AppCompatActivity() {
                     val ParentUserDataItem: UserListItem
                     ParentUserDataItem = UserListItem()
                     ParentUserDataItem.userName=child.key!!.toString()
+
+                    val UserActionItems = arrayListOf<UserActionItem>()
+                    var UserActionItem: UserActionItem
+                    UserActionItem = UserActionItem()
+                    UserActionItem.actionName=ParentUserDataItem.userName+"を編集する"
+                    UserActionItems.add(UserActionItem)
+                    UserActionItem = UserActionItem()
+                    UserActionItem.actionName=ParentUserDataItem.userName+"を削除する"
+                    UserActionItems.add(UserActionItem)
 
                     ParentUserDataItem.UserActionItems=UserActionItems
                     UserDataItems.add(ParentUserDataItem)
@@ -91,7 +91,7 @@ class UserListActivity : AppCompatActivity() {
                 Log.e(UserListActivity.TAG, "messages:onCancelled: ${error.message}")
             }
         }
-        companyInfoRef.addValueEventListener(companyInfoListener)
+        userListRef.addValueEventListener(userListListener)
 
         val btnUserListBack = findViewById<Button>(R.id.btnUserListBack)
 
@@ -172,14 +172,17 @@ class UserListActivity : AppCompatActivity() {
                     }
                 } else {
                     val textViewClicked = view as TextView
-                    Toast.makeText(context, "Parent: " + textViewClicked.text.toString(), Toast.LENGTH_SHORT
-                    ).show()
                     val chosenAction = textViewClicked.text.toString()
-                    if(chosenAction == "編集"){
-
+                    if(chosenAction.contains("編集")){
+                        val userArr = chosenAction.split("を")
+                        val userName = userArr[0]
+                        var intent = Intent(this@UserListActivity, UserEditActivity::class.java)
+                        intent.putExtra("userName", userName)
+                        startActivity(intent)
                     }
-                    else if(chosenAction == "削除"){
-
+                    else if(chosenAction.contains("削除")){
+                        val userArr = chosenAction.split("を")
+                        val userName = userArr[0].toString()
                     }
                 }
             }

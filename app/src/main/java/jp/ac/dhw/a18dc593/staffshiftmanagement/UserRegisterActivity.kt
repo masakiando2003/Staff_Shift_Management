@@ -86,9 +86,9 @@ class UserRegisterActivity : AppCompatActivity() {
             }
         }
 
-        val btnUserRegisterBack = findViewById<Button>(R.id.btnUserRegisterBack)
+        val btnUserEditBack = findViewById<Button>(R.id.btnUserEditBack)
 
-        btnUserRegisterBack.setOnClickListener {
+        btnUserEditBack.setOnClickListener {
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

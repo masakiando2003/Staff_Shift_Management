@@ -11,22 +11,34 @@
         android:id="@+id/rvUserList"
         android:layout_width="406dp"
         android:layout_height="584dp"
+        android:layout_marginTop="80dp"
+        android:overScrollMode="ifContentScrolls"
         app:layout_constraintBottom_toTopOf="@+id/btnShiftListBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:overScrollMode="ifContentScrolls"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnUserListBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/txtUserList"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:text="@string/userList"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/rvUserList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
