@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">シフト管理システム</string>
-    <string name="loginUserName">ログインユーザー: admin</string>
+    <string name="loginUserLabel">ログインユーザー</string>
+    <string name="loginUserName">ログインユーザー名</string>
     <string name="userName">ユーザー名</string>
     <string name="companyName">会社名</string>
     <string name="companyDesc">会社概要</string>
-    <string name="email">E-メール</string>
+    <string name="email">メールアドレス</string>
     <string name="tel">電話番号</string>
     <string name="password">パスワード</string>
     <string name="role">権限</string>
@@ -14,6 +15,7 @@
     <string name="edit">編集</string>
     <string name="update">更新</string>
     <string name="delete">削除</string>
+    <string name="date">日付</string>
     <string name="attendDate">出勤日</string>
     <string name="attendTime">出勤時間</string>
     <string name="endTime">終了時間</string>

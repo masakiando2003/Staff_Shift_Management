@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,13 +14,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.user_list.*
 import java.io.Serializable;
 
 class UserListActivity : AppCompatActivity() {
@@ -97,7 +93,7 @@ class UserListActivity : AppCompatActivity() {
         }
         companyInfoRef.addValueEventListener(companyInfoListener)
 
-        val btnBack = findViewById<Button>(R.id.btnBack)
+        val btnBack = findViewById<Button>(R.id.btnUserRegitserBack)
 
         btnBack.setOnClickListener {
             var intent = Intent(this, MainActivity::class.java)

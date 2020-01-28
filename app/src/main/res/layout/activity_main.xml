@@ -10,9 +10,9 @@
     <TextView
         android:id="@+id/loginUser"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="91dp"
         android:paddingTop="30dp"
-        android:text="@string/loginUserName"
+        android:text="@string/loginUserLabel"
         android:textAlignment="center"
         android:textSize="26sp" />
 
