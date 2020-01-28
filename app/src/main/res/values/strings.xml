@@ -5,7 +5,7 @@
     <string name="userName">ユーザー名</string>
     <string name="companyName">会社名</string>
     <string name="companyDesc">会社概要</string>
-    <string name="email">E-メール</string>
+    <string name="email">メールアドレス</string>
     <string name="tel">電話番号</string>
     <string name="password">パスワード</string>
     <string name="role">権限</string>
