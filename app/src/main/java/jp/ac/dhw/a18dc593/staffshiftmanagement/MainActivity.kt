@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             .build()
         db.firestoreSettings = settings
 
-        val userEmail = sharedpreferences!!.getString("email", null).toString()
+        val userEmail = sharedpreferences!!.getString("email", null)?.toString()
 
         db.collection("users").whereEqualTo("email", userEmail)
             .get()

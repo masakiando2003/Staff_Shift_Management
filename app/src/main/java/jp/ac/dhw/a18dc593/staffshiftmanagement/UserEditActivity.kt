@@ -1,5 +1,6 @@
 package jp.ac.dhw.a18dc593.staffshiftmanagement
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -8,15 +9,17 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 
 class UserEditActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "UserEdit"
+        private const val TAG = "UserEditActivity"
     }
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var userDetailRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userDetailListener: ValueEventListener
@@ -28,6 +31,9 @@ class UserEditActivity : AppCompatActivity() {
         val intent: Intent = getIntent()
         val userName = intent.getStringExtra("userName")
         val oldUserName = userName
+        val userEmail = intent.getStringExtra("userEmail")
+        val oldUserPassword = intent.getStringExtra("userPassword")
+        val oldUserEmail = userEmail
         if(userName != null && !TextUtils.isEmpty(userName)){
             databaseReference = FirebaseDatabase.getInstance().reference
             userDetailRef = databaseReference.child("users").child(userName)
@@ -111,8 +117,6 @@ class UserEditActivity : AppCompatActivity() {
                                 databaseReference.child("users").child(editUserName).setValue(userData)
                                 Toast.makeText(this@UserEditActivity, "ユーザー: "+editUserName+"を更新しました",
                                     Toast.LENGTH_SHORT).show()
-                                val intentBack = Intent(this@UserEditActivity, UserListActivity::class.java)
-                                startActivity(intentBack)
                             }
                         }
                         override fun onCancelled(error: DatabaseError) {
@@ -123,9 +127,20 @@ class UserEditActivity : AppCompatActivity() {
                 databaseReference.child("users").child(editUserName).setValue(userData)
                 Toast.makeText(this, "ユーザー: "+editUserName+"を更新しました",
                     Toast.LENGTH_SHORT).show()
-                val intentBack = Intent(this, UserListActivity::class.java)
-                startActivity(intentBack)
             }
+            auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+            currentUser?.updateEmail(editUserEmail)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "User email address update successfully!.")
+                    }
+                    else {
+                        Log.d(TAG, "User email address update failure.")
+                    }
+                }
+            val intentBack = Intent(this, UserListActivity::class.java)
+            startActivity(intentBack)
         }
 
         val btnUserDelete = findViewById<Button>(R.id.btnUserDelete)

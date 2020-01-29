@@ -52,9 +52,6 @@ class UserListActivity : AppCompatActivity() {
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-        Log.d(TAG, "email: "+sharedpreferences!!.getString("email", null))
-        Log.d(TAG, "loginUserName: "+sharedpreferences!!.getString("loginUserName", null))
-        Log.d(TAG, "loginUserRole: "+sharedpreferences!!.getString("loginUserRole", null))
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
@@ -187,15 +184,19 @@ class UserListActivity : AppCompatActivity() {
                     if(chosenAction.contains("見る")){
                         val userArr = chosenAction.split("の")
                         val userName = userArr[0]
-                        var intent = Intent(this@UserListActivity, UserDetailActivity::class.java)
+                        val intent = Intent(this@UserListActivity, UserDetailActivity::class.java)
                         intent.putExtra("userName", userName)
                         startActivity(intent)
                     }
                     if(chosenAction.contains("編集")){
                         val userArr = chosenAction.split("を")
                         val userName = userArr[0]
-                        var intent = Intent(this@UserListActivity, UserEditActivity::class.java)
+                        val userEmail = sharedpreferences!!.getString("email",null)?.toString()
+                        val userPassword = sharedpreferences!!.getString("email",null)?.toString()
+                        val intent = Intent(this@UserListActivity, UserEditActivity::class.java)
                         intent.putExtra("userName", userName)
+                        intent.putExtra("userEmail", userEmail)
+                        intent.putExtra("userPassword", userPassword)
                         startActivity(intent)
                     }
                     else if(chosenAction.contains("削除")){
