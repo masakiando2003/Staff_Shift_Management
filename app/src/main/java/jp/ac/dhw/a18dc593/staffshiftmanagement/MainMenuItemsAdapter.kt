@@ -2,13 +2,17 @@ package jp.ac.dhw.a18dc593.staffshiftmanagement
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.menu_list_item.view.*
 
 class MainMenuItemsAdapter(val context:Context, val menuItems: List<MainMenuItems>) : androidx.recyclerview.widget.RecyclerView.Adapter<MainMenuItemsAdapter.MyViewHolder>() {
+
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.menu_list_item, parent, false)
@@ -43,6 +47,9 @@ class MainMenuItemsAdapter(val context:Context, val menuItems: List<MainMenuItem
                 } else if(currentItem.toString().contains("ユーザー登録")) {
                     intent = Intent(context, UserRegisterActivity::class.java)
                 } else if(currentItem.toString().contains("ログアウト")) {
+                    auth = FirebaseAuth.getInstance()
+                    auth.signOut()
+                    Log.d("MainActivity", "Firebase auth user: ${auth.currentUser}")
                     intent = Intent(context, LogInActivity::class.java)
                 }
                 if(intent != null){

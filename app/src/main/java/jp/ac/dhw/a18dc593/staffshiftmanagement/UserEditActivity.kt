@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -115,8 +116,6 @@ class UserEditActivity : AppCompatActivity() {
                             else {
                                 databaseReference.child("users").child(oldUserName).removeValue()
                                 databaseReference.child("users").child(editUserName).setValue(userData)
-                                Toast.makeText(this@UserEditActivity, "ユーザー: "+editUserName+"を更新しました",
-                                    Toast.LENGTH_SHORT).show()
                             }
                         }
                         override fun onCancelled(error: DatabaseError) {
@@ -125,22 +124,36 @@ class UserEditActivity : AppCompatActivity() {
                 });
             } else{
                 databaseReference.child("users").child(editUserName).setValue(userData)
-                Toast.makeText(this, "ユーザー: "+editUserName+"を更新しました",
-                    Toast.LENGTH_SHORT).show()
             }
+            Toast.makeText(this, "ユーザー: "+editUserName+"を更新しています。少々お待ちください...",
+                Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "Old User Email: $oldUserEmail, Old User Password: $oldUserPassword")
             auth = FirebaseAuth.getInstance()
-            val currentUser = auth.currentUser
-            currentUser?.updateEmail(editUserEmail)
-                ?.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "User email address update successfully!.")
+            if(editUserEmail != oldUserEmail){
+                auth.createUserWithEmailAndPassword(editUserEmail, editUserPassword)
+                    .addOnCompleteListener { task2->
+                        if (task2.isSuccessful) {
+                            Log.d(TAG, "Create new user successfully!!")
+                            val currentUser = auth.currentUser
+                            Log.d(TAG, "Current User Email: ${currentUser!!.email}")
+                            currentUser.delete()
+                                .addOnCompleteListener { task3->
+                                    if (task3.isSuccessful) {
+                                        Log.d(TAG, "Delete old user successfully!!")
+                                        Toast.makeText(this, "ユーザー: "+editUserName+"を更新しました",
+                                            Toast.LENGTH_SHORT).show()
+                                        val intentBack = Intent(this, UserListActivity::class.java)
+                                        startActivity(intentBack)
+                                    } else {
+                                        Log.d(TAG, "Delete old user faiure...")
+                                    }
+                                }
+                        }
+                        else{
+                            Log.d(TAG, "Create new user failure...")
+                        }
                     }
-                    else {
-                        Log.d(TAG, "User email address update failure.")
-                    }
-                }
-            val intentBack = Intent(this, UserListActivity::class.java)
-            startActivity(intentBack)
+            }
         }
 
         val btnUserDelete = findViewById<Button>(R.id.btnUserDelete)

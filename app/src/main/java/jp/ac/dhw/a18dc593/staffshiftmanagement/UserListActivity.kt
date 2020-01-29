@@ -192,7 +192,7 @@ class UserListActivity : AppCompatActivity() {
                         val userArr = chosenAction.split("を")
                         val userName = userArr[0]
                         val userEmail = sharedpreferences!!.getString("email",null)?.toString()
-                        val userPassword = sharedpreferences!!.getString("email",null)?.toString()
+                        val userPassword = sharedpreferences!!.getString("password",null)?.toString()
                         val intent = Intent(this@UserListActivity, UserEditActivity::class.java)
                         intent.putExtra("userName", userName)
                         intent.putExtra("userEmail", userEmail)
