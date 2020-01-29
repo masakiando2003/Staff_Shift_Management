@@ -26,7 +26,7 @@ class LogInActivity : AppCompatActivity() {
     val emailKey = "email"
     val passwordKey = "password"
     val loginUserName = "loginUserName"
-    val loginUserID = "loginUserID"
+    val loginUserRole = "loginUserRole"
     var sharedpreferences: SharedPreferences? = null
     private lateinit var auth: FirebaseAuth
     private lateinit var UserInfoRef: DatabaseReference
@@ -76,9 +76,9 @@ class LogInActivity : AppCompatActivity() {
 
                                     Log.d(TAG, "Number of messages: ${dataSnapshot.childrenCount}")
                                     dataSnapshot.children.forEach { child ->
-                                        if(child.child("email").value == email){
+                                        if(child.child("email").value.toString() == email){
                                             editor2.putString(loginUserName, child.key)
-                                            editor2.putString(loginUserID, child.child("userID").value.toString())
+                                            editor2.putString(loginUserRole, child.child("role").value.toString())
                                         }
                                     }
                                     editor2.apply()

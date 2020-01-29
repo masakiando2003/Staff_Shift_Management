@@ -24,7 +24,7 @@ import java.io.Serializable;
 class UserListActivity : AppCompatActivity() {
     
     companion object {
-        private const val TAG = "UserList"
+        private const val TAG = "UserListActivity"
     }
 
 
@@ -52,6 +52,9 @@ class UserListActivity : AppCompatActivity() {
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
+        Log.d(TAG, "email: "+sharedpreferences!!.getString("email", null))
+        Log.d(TAG, "loginUserName: "+sharedpreferences!!.getString("loginUserName", null))
+        Log.d(TAG, "loginUserRole: "+sharedpreferences!!.getString("loginUserRole", null))
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
@@ -76,13 +79,14 @@ class UserListActivity : AppCompatActivity() {
                     UserActionItem = UserActionItem()
                     UserActionItem.actionName=ParentUserDataItem.userName+"のデータを見る"
                     UserActionItems.add(UserActionItem)
-                    UserActionItem = UserActionItem()
-                    UserActionItem.actionName=ParentUserDataItem.userName+"を編集する"
-                    UserActionItems.add(UserActionItem)
-                    UserActionItem = UserActionItem()
-                    UserActionItem.actionName=ParentUserDataItem.userName+"を削除する"
-                    UserActionItems.add(UserActionItem)
-
+                    if(sharedpreferences!!.contains("loginUserRole") && sharedpreferences!!.getString("loginUserRole", null)?.toString() == "admin") {
+                        UserActionItem = UserActionItem()
+                        UserActionItem.actionName=ParentUserDataItem.userName+"を編集する"
+                        UserActionItems.add(UserActionItem)
+                        UserActionItem = UserActionItem()
+                        UserActionItem.actionName=ParentUserDataItem.userName+"を削除する"
+                        UserActionItems.add(UserActionItem)
+                    }
                     ParentUserDataItem.UserActionItems=UserActionItems
                     UserDataItems.add(ParentUserDataItem)
                 }
