@@ -27,7 +27,6 @@ class UserListActivity : AppCompatActivity() {
         private const val TAG = "UserListActivity"
     }
 
-
     val myPREFERENCES = "MyPrefs"
     var sharedpreferences: SharedPreferences? = null
 

@@ -33,7 +33,7 @@ class MainMenuItemsAdapter(val context:Context, val menuItems: List<MainMenuItem
             itemView.setOnClickListener {
                 var intent : Intent? = null
                 if(currentItem.toString().contains("出勤シフト一覧")){
-                    intent = Intent(context, ShiftListActivity::class.java)
+                    intent = Intent(context, ShiftDateActivity::class.java)
                 } else if(currentItem.toString().contains("出勤シフト登録")){
                     intent = Intent(context, CreateShiftActivity::class.java)
                 } else if(currentItem.toString().contains("会社情報")){

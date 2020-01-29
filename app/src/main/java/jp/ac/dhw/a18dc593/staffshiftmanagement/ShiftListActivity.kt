@@ -23,9 +23,8 @@ import java.io.Serializable
 class ShiftListActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "ShiftList"
+        private const val TAG = "ShiftListActivity"
     }
-
 
     val myPREFERENCES = "MyPrefs"
     var sharedpreferences: SharedPreferences? = null
@@ -41,8 +40,23 @@ class ShiftListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shift_list)
 
-        Toast.makeText(this@ShiftListActivity, "少々お待ちください...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@ShiftListActivity, "少々お待ちください...",
+            Toast.LENGTH_SHORT).show()
 
+        val intent: Intent = getIntent()
+        val shiftDateFormatted = intent.getStringExtra("ShiftDateFormatted")
+        val shiftDate = intent.getStringExtra("ShiftDate")
+        Log.d(TAG, "shiftDateFormatted: $shiftDateFormatted, shiftDate: $shiftDate")
+        if(shiftDate == null && shiftDateFormatted == null){
+            Toast.makeText(this@ShiftListActivity, "選択した日付が不明です。もう一度選択してください。",
+                Toast.LENGTH_SHORT).show()
+            val redirectIntent = Intent(this, ShiftDateActivity::class.java)
+            startActivity(redirectIntent)
+        } else {
+            Toast.makeText(this@ShiftListActivity, "選択した日付: $shiftDateFormatted",
+                Toast.LENGTH_SHORT).show()
+        }
+        /*
         shiftRecyclerListView = findViewById(R.id.rvShiftList) as RecyclerView
         val ShiftDataItems = arrayListOf<ShiftListItem>()
         //val UserDataItems = arrayListOf<UserListItem>()
@@ -95,6 +109,7 @@ class ShiftListActivity : AppCompatActivity() {
             }
         }
         shiftListRef.addValueEventListener(shiftListListener)
+        */
 
         val btnShiftListBack = findViewById<Button>(R.id.btnShiftListBack)
 
