@@ -21,6 +21,8 @@
     <string name="attendDate">出勤日</string>
     <string name="attendTime">出勤時間</string>
     <string name="endTime">終了時間</string>
+    <string name="date_hint">ダブルクリックで日付を選ぶ</string>
+    <string name="time_hint">ダブルクリックで時間を選ぶ</string>
     <string name="memo">メモ</string>
     <string name="notification">通知</string>
     <string name="notification_time">通知時間</string>
