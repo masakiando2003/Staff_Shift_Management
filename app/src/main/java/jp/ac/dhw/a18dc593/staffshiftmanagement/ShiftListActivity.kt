@@ -25,7 +25,7 @@ class ShiftListActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "ShiftListActivity"
     }
-    
+
     private val myPREFERENCES = "MyPrefs"
     var sharedpreferences: SharedPreferences? = null
 
@@ -40,7 +40,35 @@ class ShiftListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shift_list)
 
-        Toast.makeText(this@ShiftListActivity, "少々お待ちください...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@ShiftListActivity, "少々お待ちください...",
+            Toast.LENGTH_SHORT).show()
+
+        val intent: Intent = getIntent()
+        val shiftDateFormatted = intent.getStringExtra("ShiftDateFormatted")
+        val shiftDate = intent.getStringExtra("ShiftDate")
+        Log.d(TAG, "shiftDateFormatted: $shiftDateFormatted, shiftDate: $shiftDate")
+        if(shiftDate == null && shiftDateFormatted == null){
+            Toast.makeText(this@ShiftListActivity, "選択した日付が不明です。もう一度選択してください。",
+                Toast.LENGTH_SHORT).show()
+            val redirectIntent = Intent(this, ShiftDateActivity::class.java)
+            startActivity(redirectIntent)
+        } else {
+            Toast.makeText(this@ShiftListActivity, "選択した日付: $shiftDateFormatted",
+                Toast.LENGTH_SHORT).show()
+        }
+        /*
+        shiftRecyclerListView = findViewById(R.id.rvShiftList) as RecyclerView
+        val ShiftDataItems = arrayListOf<ShiftListItem>()
+        //val UserDataItems = arrayListOf<UserListItem>()
+        val ShiftActionItems = arrayListOf<ShiftActionItem>()
+
+        var ShiftActionItem: ShiftActionItem
+        ShiftActionItem = ShiftActionItem()
+        ShiftActionItem.actionName="編集"
+        ShiftActionItems.add(ShiftActionItem)
+        ShiftActionItem = ShiftActionItem()
+        ShiftActionItem.actionName="削除"
+        ShiftActionItems.add(ShiftActionItem)
 
         sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
         if(!sharedpreferences!!.contains("email")){
@@ -70,7 +98,7 @@ class ShiftListActivity : AppCompatActivity() {
                     var shiftActionItem = ShiftActionItem()
                     shiftActionItem.actionName=parentShiftDataItem.userName+"のデータを見る"
                     userActionItems.add(shiftActionItem)
-                    if(sharedpreferences!!.contains("loginUserRole") && 
+                    if(sharedpreferences!!.contains("loginUserRole") &&
                         sharedpreferences!!.getString("loginUserRole", null)?.toString() == "admin") {
                         shiftActionItem = ShiftActionItem()
                         shiftActionItem.actionName=parentShiftDataItem.userName+"を編集する"
@@ -95,6 +123,7 @@ class ShiftListActivity : AppCompatActivity() {
             }
         }
         shiftListRef.addValueEventListener(shiftListListener)
+        */
 
         val btnShiftListBack = findViewById<Button>(R.id.btnShiftListBack)
 

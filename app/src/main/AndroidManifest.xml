@@ -25,6 +25,7 @@
         <activity android:name=".UserEditActivity" />
         <activity android:name=".UserRegisterActivity" />
         <activity android:name=".LogInActivity" />
+        <activity android:name=".ShiftDateActivity" />
         <activity android:name=".ShiftListActivity" />
     </application>
 
