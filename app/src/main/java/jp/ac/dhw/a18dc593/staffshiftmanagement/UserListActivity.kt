@@ -52,9 +52,6 @@ class UserListActivity : AppCompatActivity() {
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-        Log.d(TAG, "email: "+sharedpreferences!!.getString("email", null))
-        Log.d(TAG, "loginUserName: "+sharedpreferences!!.getString("loginUserName", null))
-        Log.d(TAG, "loginUserRole: "+sharedpreferences!!.getString("loginUserRole", null))
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
