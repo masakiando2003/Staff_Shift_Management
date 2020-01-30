@@ -13,7 +13,7 @@
         android:layout_height="584dp"
         android:layout_marginTop="80dp"
         android:overScrollMode="ifContentScrolls"
-        app:layout_constraintBottom_toTopOf="@+id/btnShiftListBack"
+        app:layout_constraintBottom_toTopOf="@+id/btnUserListBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />

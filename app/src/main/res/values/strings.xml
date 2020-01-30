@@ -18,6 +18,7 @@
     <string name="update">更新</string>
     <string name="delete">削除</string>
     <string name="date">日付</string>
+    <string name="selectedDate">選択した日付: </string>
     <string name="attendDate">出勤日</string>
     <string name="attendTime">出勤時間</string>
     <string name="endTime">終了時間</string>

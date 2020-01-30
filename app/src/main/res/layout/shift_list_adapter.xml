@@ -13,33 +13,18 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/txtShiftDate"
+            android:id="@+id/txtStaffName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/date"
             android:padding="16dp"/>
 
         <LinearLayout
-            android:id="@+id/llShiftListUsers"
+            android:id="@+id/llShiftActions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/custom_border">
-
-
-            <TextView
-                android:id="@+id/txtStaffName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/userName"
-                android:padding="16dp"/>
-
-            <LinearLayout
-                android:id="@+id/llShiftActinons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/custom_border"></LinearLayout>
 
         </LinearLayout>
 

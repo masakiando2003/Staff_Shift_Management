@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,107 +44,110 @@ class ShiftListActivity : AppCompatActivity() {
         Toast.makeText(this@ShiftListActivity, "少々お待ちください...",
             Toast.LENGTH_SHORT).show()
 
-        val intent: Intent = getIntent()
-        val shiftDateFormatted = intent.getStringExtra("ShiftDateFormatted")
-        val shiftDate = intent.getStringExtra("ShiftDate")
+        val shiftDateFormatted = intent!!.getStringExtra("shiftDateFormatted")
+        val shiftDate = intent!!.getStringExtra("shiftDate")
         Log.d(TAG, "shiftDateFormatted: $shiftDateFormatted, shiftDate: $shiftDate")
         if(shiftDate == null && shiftDateFormatted == null){
-            Toast.makeText(this@ShiftListActivity, "選択した日付が不明です。もう一度選択してください。",
+            Toast.makeText(this@ShiftListActivity,
+                "選択した日付が不明です。もう一度選択してください。",
                 Toast.LENGTH_SHORT).show()
             val redirectIntent = Intent(this, ShiftDateActivity::class.java)
             startActivity(redirectIntent)
         } else {
-            Toast.makeText(this@ShiftListActivity, "選択した日付: $shiftDateFormatted",
-                Toast.LENGTH_SHORT).show()
-        }
-        /*
-        shiftRecyclerListView = findViewById(R.id.rvShiftList) as RecyclerView
-        val ShiftDataItems = arrayListOf<ShiftListItem>()
-        //val UserDataItems = arrayListOf<UserListItem>()
-        val ShiftActionItems = arrayListOf<ShiftActionItem>()
+            sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
+            if(!sharedpreferences!!.contains("email")){
+                val loginIntent = Intent(this, LogInActivity::class.java)
+                startActivity(loginIntent)
+            }
 
-        var ShiftActionItem: ShiftActionItem
-        ShiftActionItem = ShiftActionItem()
-        ShiftActionItem.actionName="編集"
-        ShiftActionItems.add(ShiftActionItem)
-        ShiftActionItem = ShiftActionItem()
-        ShiftActionItem.actionName="削除"
-        ShiftActionItems.add(ShiftActionItem)
+            val txtSelectedDate = findViewById<TextView>(R.id.txtSelectedShiftList)
+            txtSelectedDate.text = ("選択した日付: $shiftDateFormatted")
 
-        sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
-        if(!sharedpreferences!!.contains("email")){
-            val loginIntent = Intent(this, LogInActivity::class.java)
-            startActivity(loginIntent)
-        }
+            shiftRecyclerListView = findViewById(R.id.rvShiftList)
+            val shiftDataItems = arrayListOf<ShiftListItem>()
 
-        shiftRecyclerListView = findViewById(R.id.rvShiftList)
-        val shiftDataItems = arrayListOf<ShiftListItem>()
-        val shiftActionItems = arrayListOf<ShiftActionItem>()
+            databaseReference = FirebaseDatabase.getInstance().reference
 
-        databaseReference = FirebaseDatabase.getInstance().reference
+            shiftListRef = databaseReference.child("shift_list").child(shiftDate)
+            shiftListListener = object : ValueEventListener {
 
-        shiftListRef = databaseReference.child("shift_list")
-        shiftListListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    Log.d(TAG, "Number of messages: ${dataSnapshot.childrenCount}")
+                    if(dataSnapshot.childrenCount < 1){
+                        Toast.makeText(this@ShiftListActivity,
+                            "選択した日付に出勤データがありません。" +
+                                    "別の日付を選択してください。",
+                            Toast.LENGTH_SHORT).show()
+                    } else {
+                        dataSnapshot.children.forEach { child ->
+                            shiftListRecyclerAdapter = null
+                            shiftRecyclerListView!!.adapter = shiftListRecyclerAdapter
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d(TAG, "Number of messages: ${dataSnapshot.childrenCount}")
-                dataSnapshot.children.forEach { child ->
-                    shiftListRecyclerAdapter = null
-                    shiftRecyclerListView!!.adapter = shiftListRecyclerAdapter
+                            val parentShiftDataItem = ShiftListItem()
+                            parentShiftDataItem.userName=child.key!!.toString()
 
-                    val parentShiftDataItem = ShiftListItem()
-                    parentShiftDataItem.date=child.key!!.toString()
+                            val shiftActionItems = arrayListOf<ShiftActionItem>()
+                            var shiftActionItem = ShiftActionItem()
+                            shiftActionItem.actionName=parentShiftDataItem.userName+
+                                    "の出勤データを見る"
+                            shiftActionItems.add(shiftActionItem)
+                            if(sharedpreferences!!.contains("loginUserRole") &&
+                                sharedpreferences!!.getString("loginUserRole",
+                                    null)?.toString() == "admin") {
+                                shiftActionItem = ShiftActionItem()
+                                shiftActionItem.actionName=parentShiftDataItem.userName+
+                                        "の出勤データを編集する"
+                                shiftActionItems.add(shiftActionItem)
+                                shiftActionItem = ShiftActionItem()
+                                shiftActionItem.actionName=parentShiftDataItem.userName+
+                                        "の出勤データを削除する"
+                                shiftActionItems.add(shiftActionItem)
+                            }
 
-                    val userActionItems = arrayListOf<ShiftActionItem>()
-                    var shiftActionItem = ShiftActionItem()
-                    shiftActionItem.actionName=parentShiftDataItem.userName+"のデータを見る"
-                    userActionItems.add(shiftActionItem)
-                    if(sharedpreferences!!.contains("loginUserRole") &&
-                        sharedpreferences!!.getString("loginUserRole", null)?.toString() == "admin") {
-                        shiftActionItem = ShiftActionItem()
-                        shiftActionItem.actionName=parentShiftDataItem.userName+"を編集する"
-                        userActionItems.add(shiftActionItem)
-                        shiftActionItem = ShiftActionItem()
-                        shiftActionItem.actionName=parentShiftDataItem.userName+"を削除する"
-                        userActionItems.add(shiftActionItem)
+                            parentShiftDataItem.shiftActionItems=shiftActionItems
+                            shiftDataItems.add(parentShiftDataItem)
+                        }
+                        val layoutManager = LinearLayoutManager(this@ShiftListActivity)
+                        shiftRecyclerListView!!.layoutManager = layoutManager
+                        shiftListRecyclerAdapter = ShiftListAdapter(this@ShiftListActivity,
+                            shiftDataItems)
+                        shiftRecyclerListView!!.addItemDecoration(
+                            DividerItemDecoration(shiftRecyclerListView!!.context,
+                                layoutManager.orientation)
+                        )
+                        shiftRecyclerListView!!.adapter = shiftListRecyclerAdapter
                     }
-
-                    parentShiftDataItem.shiftActionItems=shiftActionItems
-                    shiftDataItems.add(parentShiftDataItem)
                 }
-                val layoutManager = LinearLayoutManager(this@ShiftListActivity)
-                shiftRecyclerListView!!.setLayoutManager(layoutManager)
-                shiftListRecyclerAdapter = ShiftListAdapter(this@ShiftListActivity, shiftDataItems)
-                shiftRecyclerListView!!.addItemDecoration(DividerItemDecoration(shiftRecyclerListView!!.getContext(), layoutManager.orientation))
-                shiftRecyclerListView!!.setAdapter(shiftListRecyclerAdapter)
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "messages:onCancelled: ${error.message}")
+                }
             }
+            shiftListRef.addValueEventListener(shiftListListener)
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "messages:onCancelled: ${error.message}")
+            val btnShiftListBack = findViewById<Button>(R.id.btnShiftListBack)
+
+            btnShiftListBack.setOnClickListener {
+                val redirectIntent = Intent(this, MainActivity::class.java)
+                startActivity(redirectIntent)
             }
-        }
-        shiftListRef.addValueEventListener(shiftListListener)
-        */
-
-        val btnShiftListBack = findViewById<Button>(R.id.btnShiftListBack)
-
-        btnShiftListBack.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
         }
     }
 
 
-    private inner class ShiftListAdapter(internal var context: Context, internal var mData: List<ShiftListItem>) : RecyclerView.Adapter<ShiftListAdapter.myViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
+    private inner class ShiftListAdapter(internal var context: Context,
+                                         internal var mData: List<ShiftListItem>) :
+        RecyclerView.Adapter<ShiftListAdapter.ShiftListViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShiftListViewHolder {
             val view =
-                LayoutInflater.from(context).inflate(R.layout.shift_list_adapter, parent, false)
-            return myViewHolder(view)
+                LayoutInflater.from(context).inflate(R.layout.shift_list_adapter, parent,
+                    false)
+            return ShiftListViewHolder(view)
         }
 
-        override fun onBindViewHolder(holder: myViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: ShiftListViewHolder, position: Int) {
             val shiftListItem = mData[position]
-            holder.date!!.text = shiftListItem.date
+            holder.staffName!!.text = shiftListItem.userName
             val noOfChildTextViews = holder.lLayoutChildItems!!.childCount
             val noOfChild = shiftListItem.shiftActionItems!!.size
             if (noOfChild < noOfChildTextViews) {
@@ -164,10 +168,10 @@ class ShiftListActivity : AppCompatActivity() {
             return mData.size
         }
 
-        inner class myViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        inner class ShiftListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
-            internal var date: TextView? = itemView.findViewById(R.id.txtShiftDate)
-            val lLayoutChildItems: LinearLayout? = itemView.findViewById(R.id.llShiftListUsers)
+            internal var staffName: TextView? = itemView.findViewById(R.id.txtStaffName)
+            val lLayoutChildItems: LinearLayout? = itemView.findViewById(R.id.llShiftActions)
 
             init {
                 lLayoutChildItems!!.visibility = View.GONE
@@ -181,8 +185,6 @@ class ShiftListActivity : AppCompatActivity() {
                     textView.id = indexView
                     textView.gravity = Gravity.START
                     textView.setPadding(80, 60, 0, 60)
-                    /*textView.background =
-                        ContextCompat.getDrawable(context, R.drawable.ic_keyboard_arrow_down_black_24dp)*/
                     val layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
@@ -190,11 +192,11 @@ class ShiftListActivity : AppCompatActivity() {
                     textView.setOnClickListener(this)
                     lLayoutChildItems.addView(textView, layoutParams)
                 }
-                date!!.setOnClickListener(this)
+                staffName!!.setOnClickListener(this)
             }
 
             override fun onClick(view: View) {
-                if (view.id == R.id.txtShiftDate) {
+                if (view.id == R.id.txtStaffName) {
                     if (lLayoutChildItems!!.visibility == View.VISIBLE) {
                         lLayoutChildItems.visibility = View.GONE
                     } else {
@@ -202,15 +204,49 @@ class ShiftListActivity : AppCompatActivity() {
                     }
                 } else {
                     val textViewClicked = view as TextView
-                    Toast.makeText(context, "Parent: " + textViewClicked.text.toString(), Toast.LENGTH_SHORT
-                    ).show()
                     val chosenAction = textViewClicked.text.toString()
                     when{
+                        (chosenAction.contains("見る"))->{
+                            val userArr = chosenAction.split("の")
+                            val userName = userArr[0]
+                            val intent = Intent(this@ShiftListActivity,
+                                ShiftDetailActivity::class.java)
+                            intent.putExtra("userName", userName)
+                            startActivity(intent)
+                        }
                         (chosenAction.contains("編集"))->{
-
+                            val userArr = chosenAction.split("の")
+                            val userName = userArr[0]
+                            val intent = Intent(this@ShiftListActivity,
+                                ShiftEditActivity::class.java)
+                            intent.putExtra("userName", userName)
+                            startActivity(intent)
                         }
                         (chosenAction.contains("削除")) ->{
-
+                            val userArr = chosenAction.split("の")
+                            val userName = userArr[0]
+                            val shiftDateFormatted =
+                                intent!!.getStringExtra("shiftDateFormatted")
+                            val shiftDate = intent!!.getStringExtra("shiftDate")
+                            AlertDialog.Builder(context)
+                                .setTitle("注意!")
+                                .setMessage(userName+"の出勤データを削除してもよろしいでしょうか?")
+                                .setPositiveButton("OK") { _, _ ->
+                                    databaseReference.child("shift_list")
+                                        .child(shiftDate)
+                                        .child(userName).removeValue()
+                                    Toast.makeText(context,
+                                        "ユーザー: $userName の出勤データを削除しました",
+                                        Toast.LENGTH_SHORT).show()
+                                    val intentRefresh = Intent(context,
+                                        ShiftListActivity::class.java)
+                                    intentRefresh.putExtra("shiftDateFormatted",
+                                        shiftDateFormatted)
+                                    intentRefresh.putExtra("shiftDate", shiftDate)
+                                    startActivity(intentRefresh)
+                                }
+                                .setNegativeButton("No", null)
+                                .show()
                         }
                     }
                 }
@@ -219,7 +255,6 @@ class ShiftListActivity : AppCompatActivity() {
     }
 
     private inner class ShiftListItem : Serializable {
-        var date: String? = null
         var userName: String? = null
         var shiftActionItems: ArrayList<ShiftActionItem>? = null
     }
