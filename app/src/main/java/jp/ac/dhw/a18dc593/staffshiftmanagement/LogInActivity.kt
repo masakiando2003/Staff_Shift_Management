@@ -79,7 +79,8 @@ class LogInActivity : AppCompatActivity() {
                                         }
                                     }
                                     editor2.apply()
-                                    val intent = Intent(this@LogInActivity, MainActivity::class.java)
+                                    val intent = Intent(this@LogInActivity,
+                                        MainActivity::class.java)
                                     startActivity(intent)
                                 }
 
@@ -90,7 +91,8 @@ class LogInActivity : AppCompatActivity() {
                             userInfoRef.addValueEventListener(userInfoListener)
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
-                            Toast.makeText(baseContext, "E-メール、パスワードの入力に誤りがあります。",
+                            Toast.makeText(baseContext,
+                                "E-メール、パスワードの入力に誤りがあります。",
                                 Toast.LENGTH_SHORT).show()
                         }
                     }

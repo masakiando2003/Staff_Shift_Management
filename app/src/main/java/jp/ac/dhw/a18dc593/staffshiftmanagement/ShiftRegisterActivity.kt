@@ -36,9 +36,14 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-        else if(mySharedPreferences!!.contains("loginUserName")){
-            val loginUserStr = findViewById<TextView>(R.id.txtUserName)
-            loginUserStr.text = mySharedPreferences!!.getString("loginUserName",null)
+        val userRole = intent!!.getStringExtra("loginUserRole")
+        if(userRole == "admin"){
+            val userName = findViewById<TextView>(R.id.txtUserName)
+        } else {
+            if(mySharedPreferences!!.contains("loginUserName")){
+                val loginUserStr = findViewById<TextView>(R.id.txtUserName)
+                loginUserStr.text = mySharedPreferences!!.getString("loginUserName",null)
+            }
         }
 
         val btnShiftEditBack = findViewById<Button>(R.id.btnShiftEditBack)
