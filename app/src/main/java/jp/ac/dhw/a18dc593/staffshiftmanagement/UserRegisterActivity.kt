@@ -82,7 +82,8 @@ class UserRegisterActivity : AppCompatActivity() {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(baseContext, "ユーザーが存在しています。別のメールアドレスで登録してください。",
+                            Toast.makeText(baseContext, "ユーザーが存在しています。" +
+                                    "別のメールアドレスで登録してください。",
                                 Toast.LENGTH_SHORT).show()
                         }
                     }
