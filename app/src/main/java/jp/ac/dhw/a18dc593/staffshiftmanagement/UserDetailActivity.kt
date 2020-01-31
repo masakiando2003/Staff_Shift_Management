@@ -53,12 +53,11 @@ class UserDetailActivity : AppCompatActivity() {
                             (field == "role") -> {
                                 val userRole =
                                     findViewById<TextView>(R.id.txtUserDetailRole)
-                                val role: String?
-                                when(field == "admin"){
-                                    true -> role = "管理者"
-                                    else ->  role = "一般ユーザー"
+                                Log.d(TAG, "role: $value")
+                                when(value.equals("admin", false)){
+                                    true -> userRole.text = "管理者"
+                                    else ->  userRole.text = "一般ユーザー"
                                 }
-                                userRole.text = role
                             }
                         }
                     }

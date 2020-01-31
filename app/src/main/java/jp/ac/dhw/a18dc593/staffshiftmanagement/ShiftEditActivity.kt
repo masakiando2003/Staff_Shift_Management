@@ -5,7 +5,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -207,7 +206,7 @@ class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
         attendDate.text = dateStr
     }
 
-    fun showDatePickerDialog(view: View) {
+    fun showDatePickerDialog(@Suppress("UNUSED_PARAMETER")view: View) {
         val newFragment = ShiftEditDatePick()
         newFragment.show(supportFragmentManager, "datePicker")
     }
@@ -234,13 +233,13 @@ class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
         }
     }
 
-    fun showTimePickerDialogForAttendTime(view: View) {
+    fun showTimePickerDialogForAttendTime(@Suppress("UNUSED_PARAMETER")view: View) {
         timePickerID = "txtAttendTime"
         val newFragment = ShiftEditTimePick()
         newFragment.show(supportFragmentManager, "timePicker")
     }
 
-    fun showTimePickerDialogForEndTime(view: View) {
+    fun showTimePickerDialogForEndTime(@Suppress("UNUSED_PARAMETER")view: View) {
         timePickerID = "txtEndTime"
         val newFragment = ShiftEditTimePick()
         newFragment.show(supportFragmentManager, "timePicker")

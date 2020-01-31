@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
@@ -84,6 +85,7 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
                     val shiftDate = shiftDateArr.joinToString("")
                     databaseReference.child("shift_list").child(shiftDate)
                         .child(userName).setValue(shiftData)
+                    Log.d(TAG, "Shift created successfully!")
                     Toast.makeText(
                         baseContext, "シフトを登録しました。",
                         Toast.LENGTH_SHORT
@@ -109,7 +111,7 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
         attendDate.text = dateStr
     }
 
-    fun showDatePickerDialog(view: View) {
+    fun showDatePickerDialog(@Suppress("UNUSED_PARAMETER")view: View) {
         val newFragment = ShiftRegisterDatePick()
         newFragment.show(supportFragmentManager, "datePicker")
     }
@@ -136,13 +138,13 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
         }
     }
 
-    fun showTimePickerDialogForAttendTime(view: View) {
+    fun showTimePickerDialogForAttendTime(@Suppress("UNUSED_PARAMETER")view: View) {
         timePickerID = "txtAttendTime"
         val newFragment = ShiftRegisterTimePick()
         newFragment.show(supportFragmentManager, "timePicker")
     }
 
-    fun showTimePickerDialogForEndTime(view: View) {
+    fun showTimePickerDialogForEndTime(@Suppress("UNUSED_PARAMETER")view: View) {
         timePickerID = "txtEndTime"
         val newFragment = ShiftRegisterTimePick()
         newFragment.show(supportFragmentManager, "timePicker")

@@ -38,13 +38,9 @@ class UserRegisterActivity : AppCompatActivity() {
             val userEmail = findViewById<TextView>(R.id.txtUserEmail).text.toString()
             val userPassword = findViewById<TextView>(R.id.txtUserPassword).text.toString()
             var userRole = findViewById<Spinner>(R.id.spnRole).selectedItem.toString()
-            when {
-                (userRole.equals("一般ユーザー", false)) ->{
-                    userRole = "user"
-                }
-                else -> {
-                    userRole = "admin"
-                }
+            userRole = when(userRole.equals("一般ユーザー", false)) {
+                true -> "user"
+                false ->  "admin"
             }
             when{
                 (TextUtils.isEmpty(userName)) ->{
