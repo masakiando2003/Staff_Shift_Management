@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,7 +38,8 @@ class MainActivity : AppCompatActivity() {
             val loginUserStr = findViewById<TextView>(R.id.loginUser)
             val loginUserName =
                 mySharedPreferences!!.getString("loginUserName",null)?.toString()
-            loginUserStr.text = "ログインユーザー: $loginUserName"
+            val displayUserText = "ログインユーザー: $loginUserName"
+            loginUserStr.text = displayUserText
         }
 
         auth = FirebaseAuth.getInstance()

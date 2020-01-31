@@ -56,14 +56,12 @@ class UserEditActivity : AppCompatActivity() {
                             }
                             (field == "role") -> {
                                 val userRole = findViewById<Spinner>(R.id.spnRole)
-                                val role: String?
-                                when{
-                                    (value == "admin") ->{
-                                        role = "管理者"
-                                    } else -> {
-                                        role = "一般ユーザー"
+                                val role: String? =
+                                    if (value.equals("admin", false)){
+                                            "管理者"
+                                    } else {
+                                        "一般ユーザー"
                                     }
-                                }
                                 val adapter =
                                     ArrayAdapter.createFromResource(
                                         this@UserEditActivity,
@@ -105,12 +103,9 @@ class UserEditActivity : AppCompatActivity() {
             val editUserPassword =
                 findViewById<TextView>(R.id.txtUserPassword).text.toString()
             var editUserRole = findViewById<Spinner>(R.id.spnRole).selectedItem.toString()
-            when {
-                (editUserRole == "一般ユーザー") -> {
-                    editUserRole = "user"
-                } else -> {
-                    editUserRole = "admin"
-                }
+            editUserRole = when(editUserRole == "一般ユーザー") {
+                true -> "user"
+                false -> "admin"
             }
             val userData = UserModel(userName, editUserEmail, editUserPassword, editUserRole)
 
