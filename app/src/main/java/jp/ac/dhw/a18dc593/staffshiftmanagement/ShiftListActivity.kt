@@ -205,6 +205,9 @@ class ShiftListActivity : AppCompatActivity() {
                 } else {
                     val textViewClicked = view as TextView
                     val chosenAction = textViewClicked.text.toString()
+                    val shiftDateFormatted =
+                        intent!!.getStringExtra("shiftDateFormatted")
+                    val shiftDate = intent!!.getStringExtra("shiftDate")
                     when{
                         (chosenAction.contains("見る"))->{
                             val userArr = chosenAction.split("の")
@@ -212,6 +215,9 @@ class ShiftListActivity : AppCompatActivity() {
                             val intent = Intent(this@ShiftListActivity,
                                 ShiftDetailActivity::class.java)
                             intent.putExtra("userName", userName)
+                            intent.putExtra("shiftDateFormatted",
+                                shiftDateFormatted)
+                            intent.putExtra("shiftDate", shiftDate)
                             startActivity(intent)
                         }
                         (chosenAction.contains("編集"))->{
@@ -220,14 +226,14 @@ class ShiftListActivity : AppCompatActivity() {
                             val intent = Intent(this@ShiftListActivity,
                                 ShiftEditActivity::class.java)
                             intent.putExtra("userName", userName)
+                            intent.putExtra("shiftDateFormatted",
+                                shiftDateFormatted)
+                            intent.putExtra("shiftDate", shiftDate)
                             startActivity(intent)
                         }
                         (chosenAction.contains("削除")) ->{
                             val userArr = chosenAction.split("の")
                             val userName = userArr[0]
-                            val shiftDateFormatted =
-                                intent!!.getStringExtra("shiftDateFormatted")
-                            val shiftDate = intent!!.getStringExtra("shiftDate")
                             AlertDialog.Builder(context)
                                 .setTitle("注意!")
                                 .setMessage(userName+"の出勤データを削除してもよろしいでしょうか?")

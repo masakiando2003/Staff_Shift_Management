@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".CompanyDetailActivity" />
-        <activity android:name=".CreateShiftActivity" />
         <activity android:name=".UserDetailActivity" />
         <activity android:name=".UserListActivity" />
         <activity android:name=".UserEditActivity" />
@@ -29,6 +28,7 @@
         <activity android:name=".ShiftDetailActivity" />
         <activity android:name=".ShiftEditActivity" />
         <activity android:name=".ShiftListActivity" />
+        <activity android:name=".ShiftRegisterActivity" />
     </application>
 
 </manifest>

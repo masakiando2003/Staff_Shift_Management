@@ -7,8 +7,7 @@ import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
-
-class CreateShiftTimePick : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class ShiftEditTimePick : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     // Bundle sould be nullable, Bundle?
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -21,7 +20,7 @@ class CreateShiftTimePick : DialogFragment(), TimePickerDialog.OnTimeSetListener
 
         return TimePickerDialog(
             activity,
-            activity as CreateShiftActivity?,
+            activity as ShiftEditActivity?,
             hour,
             minute,
             true)

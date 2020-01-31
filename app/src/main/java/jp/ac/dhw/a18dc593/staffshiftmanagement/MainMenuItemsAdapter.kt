@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import kotlinx.android.synthetic.main.menu_list_item.view.*
 
 class MainMenuItemsAdapter(val context:Context, val menuItems: List<MainMenuItems>) : androidx.recyclerview.widget.RecyclerView.Adapter<MainMenuItemsAdapter.MyViewHolder>() {
@@ -35,7 +34,7 @@ class MainMenuItemsAdapter(val context:Context, val menuItems: List<MainMenuItem
                 if(currentItem.toString().contains("出勤シフト一覧")){
                     intent = Intent(context, ShiftDateActivity::class.java)
                 } else if(currentItem.toString().contains("出勤シフト登録")){
-                    intent = Intent(context, CreateShiftActivity::class.java)
+                    intent = Intent(context, ShiftRegisterActivity::class.java)
                 } else if(currentItem.toString().contains("会社情報")){
                     intent = Intent(context, CompanyDetailActivity::class.java)
                 } else if(currentItem.toString().contains("ユーザーリスト")){

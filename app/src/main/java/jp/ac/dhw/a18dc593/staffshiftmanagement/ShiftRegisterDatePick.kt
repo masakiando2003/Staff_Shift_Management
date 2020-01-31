@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.util.*
 
-class CreateShiftDatePick : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class ShiftRegisterDatePick : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val c = Calendar.getInstance()
@@ -16,7 +16,7 @@ class CreateShiftDatePick : DialogFragment(), DatePickerDialog.OnDateSetListener
 
         return DatePickerDialog(
             activity,
-            activity as CreateShiftActivity?,
+            activity as ShiftRegisterActivity?,
             year,
             month,
             day)
