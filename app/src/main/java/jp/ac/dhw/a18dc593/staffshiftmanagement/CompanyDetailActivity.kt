@@ -14,11 +14,11 @@ import com.google.firebase.database.*
 class CompanyDetailActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "CompanyInfo"
+        private const val TAG = "CompanyInfoActivity"
     }
 
-    val myPREFERENCES = "MyPrefs"
-    var sharedpreferences: SharedPreferences? = null
+    private val myPREFERENCES = "MyPrefs"
+    private var sharedpreferences: SharedPreferences? = null
 
     private lateinit var companyInfoRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
@@ -40,32 +40,37 @@ class CompanyDetailActivity : AppCompatActivity() {
         companyInfoListener = object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // New data at this path. This method will be called after every change in the
-                // data at this path or a subpath.
-
-                Log.d(TAG, "Number of messages: ${dataSnapshot.childrenCount}")
+                Log.d(TAG, "Number of messages in Company Info: " +
+                        "${dataSnapshot.childrenCount}")
                 dataSnapshot.children.forEach { child ->
-                    if(child.key.toString() == "CompanyName"){
-                        val companyNameField = findViewById<TextView>(R.id.txtCompanyName)
-                        companyNameField.text = child.value.toString()
-                    }
-                    else if(child.key.toString() == "CompanyEmail"){
-                        val companyEmailField = findViewById<TextView>(R.id.txtCompanyEmail)
-                        companyEmailField.text = child.value.toString()
-                    }
-                    else if(child.key.toString() == "CompanyTel"){
-                        val companyTelField = findViewById<TextView>(R.id.txtCompanyTel)
-                        companyTelField.text = child.value.toString()
-                    }
-                    else if(child.key.toString() == "CompanyDesc"){
-                        val companyDescField = findViewById<TextView>(R.id.txtCompanyDesc)
-                        companyDescField.text = child.value.toString()
+                    val field = child.key.toString()
+                    val value = child.value.toString()
+                    when {
+                        (field == "CompanyName") -> {
+                            val companyNameField =
+                                findViewById<TextView>(R.id.txtCompanyName)
+                            companyNameField.text = value
+                        }
+                        (field == "CompanyEmail") -> {
+                            val companyEmailField =
+                                findViewById<TextView>(R.id.txtCompanyEmail)
+                            companyEmailField.text = value
+                        }
+                        (field == "CompanyTel") -> {
+                            val companyTelField =
+                                findViewById<TextView>(R.id.txtCompanyTel)
+                            companyTelField.text = value
+                        }
+                        (field == "CompanyDesc") -> {
+                            val companyDescField =
+                                findViewById<TextView>(R.id.txtCompanyDesc)
+                            companyDescField.text = value
+                        }
                     }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Could not successfully listen for data, log the error
                 Log.e(TAG, "messages:onCancelled: ${error.message}")
             }
         }
@@ -74,7 +79,7 @@ class CompanyDetailActivity : AppCompatActivity() {
         val btnCompanyDetailBack = findViewById<Button>(R.id.btnCompanyDetailBack)
 
         btnCompanyDetailBack.setOnClickListener {
-            var intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }

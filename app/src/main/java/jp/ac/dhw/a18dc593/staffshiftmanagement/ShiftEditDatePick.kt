@@ -16,8 +16,8 @@ class ShiftEditDatePick : DialogFragment(), DatePickerDialog.OnDateSetListener {
         val day = c.get(Calendar.DAY_OF_MONTH)
 
         return DatePickerDialog(
-            activity,
-            activity as ShiftRegisterActivity?,
+            context!!,
+            activity as ShiftEditActivity?,
             year,
             month,
             day)

@@ -14,37 +14,36 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
 
-class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener, 
+    TimePickerDialog.OnTimeSetListener {
 
     companion object {
         private const val TAG = "ShiftRegisterActivity"
     }
 
-    var timePickerID: String? = null
-
+    private var timePickerID: String? = null
     private lateinit var databaseReference: DatabaseReference
-
     private val myPREFERENCES = "MyPrefs"
-    var sharedpreferences: SharedPreferences? = null
+    private var mySharedPreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shift_edit)
 
-        sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
-        if(!sharedpreferences!!.contains("email")){
+        mySharedPreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
+        if(!mySharedPreferences!!.contains("email")){
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-        else if(sharedpreferences!!.contains("loginUserName")){
-            var loginUserStr = findViewById<TextView>(R.id.txtUserName)
-            loginUserStr.text = sharedpreferences!!.getString("loginUserName",null)
+        else if(mySharedPreferences!!.contains("loginUserName")){
+            val loginUserStr = findViewById<TextView>(R.id.txtUserName)
+            loginUserStr.text = mySharedPreferences!!.getString("loginUserName",null)
         }
 
         val btnShiftEditBack = findViewById<Button>(R.id.btnShiftEditBack)
 
         btnShiftEditBack.setOnClickListener {
-            var intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
@@ -81,10 +80,10 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
                 true -> {
                     databaseReference = FirebaseDatabase.getInstance().reference
                     val shiftData = ShiftModel(attendTime, endTime, memo)
-                    var shiftDateArr = attendDate.split("/")
+                    val shiftDateArr = attendDate.split("/")
                     val shiftDate = shiftDateArr.joinToString("")
-                    databaseReference.child("shift_list").child(shiftDate).child(userName)
-                        .setValue(shiftData)
+                    databaseReference.child("shift_list").child(shiftDate)
+                        .child(userName).setValue(shiftData)
                     Toast.makeText(
                         baseContext, "シフトを登録しました。",
                         Toast.LENGTH_SHORT

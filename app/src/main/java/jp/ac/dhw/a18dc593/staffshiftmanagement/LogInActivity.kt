@@ -22,23 +22,23 @@ class LogInActivity : AppCompatActivity() {
         private const val TAG = "LoginActivity"
     }
 
-    val myPREFERENCES = "MyPrefs"
-    val emailKey = "email"
-    val passwordKey = "password"
-    val loginUserName = "loginUserName"
-    val loginUserRole = "loginUserRole"
-    var sharedpreferences: SharedPreferences? = null
+    private val myPREFERENCES = "MyPrefs"
+    private val emailKey = "email"
+    private val passwordKey = "password"
+    private val loginUserName = "loginUserName"
+    private val loginUserRole = "loginUserRole"
+    private var mySharedPreferences: SharedPreferences? = null
     private lateinit var auth: FirebaseAuth
-    private lateinit var UserInfoRef: DatabaseReference
+    private lateinit var userInfoRef: DatabaseReference
     private lateinit var dbRef: DatabaseReference
-    private lateinit var UserInfoListener: ValueEventListener
+    private lateinit var userInfoListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
 
-        sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
-        val editor = sharedpreferences!!.edit()
+        mySharedPreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
+        val editor = mySharedPreferences!!.edit()
         editor.clear()
         editor.apply()
 
@@ -51,34 +51,33 @@ class LogInActivity : AppCompatActivity() {
             val password = findViewById<EditText>(R.id.txtPassword).text.toString()
 
             if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
-
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success")
-                            Toast.makeText(this, "ログイン中です。少々お待ちください...",
+                            Toast.makeText(this,
+                                "ログイン中です。少々お待ちください...",
                                 Toast.LENGTH_SHORT).show()
 
                             // アカウントの情報をsession(sharedPreferences)に保存する
-                            sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
-                            val editor2 = sharedpreferences!!.edit()
+                            mySharedPreferences = getSharedPreferences(myPREFERENCES,
+                                Context.MODE_PRIVATE)
+                            val editor2 = mySharedPreferences!!.edit()
 
                             editor2.putString(emailKey, email)
                             editor2.putString(passwordKey, password)
                             dbRef = FirebaseDatabase.getInstance().reference
-                            UserInfoRef = dbRef.child("users")
-                            UserInfoListener = object : ValueEventListener {
+                            userInfoRef = dbRef.child("users")
+                            userInfoListener = object : ValueEventListener {
 
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                    // New data at this path. This method will be called after every change in the
-                                    // data at this path or a subpath.
-
-                                    Log.d(TAG, "Number of messages: ${dataSnapshot.childrenCount}")
+                                    Log.d(TAG, "Number of messages: " +
+                                            "${dataSnapshot.childrenCount}")
                                     dataSnapshot.children.forEach { child ->
                                         if(child.child("email").value.toString() == email){
                                             editor2.putString(loginUserName, child.key)
-                                            editor2.putString(loginUserRole, child.child("role").value.toString())
+                                            editor2.putString(loginUserRole,
+                                                child.child("role").value.toString())
                                         }
                                     }
                                     editor2.apply()
@@ -87,13 +86,11 @@ class LogInActivity : AppCompatActivity() {
                                 }
 
                                 override fun onCancelled(error: DatabaseError) {
-                                    // Could not successfully listen for data, log the error
                                     Log.e(TAG, "messages:onCancelled: ${error.message}")
                                 }
                             }
-                            UserInfoRef.addValueEventListener(UserInfoListener)
+                            userInfoRef.addValueEventListener(userInfoListener)
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
                             Toast.makeText(baseContext, "E-メール、パスワードの入力に誤りがあります。",
                                 Toast.LENGTH_SHORT).show()

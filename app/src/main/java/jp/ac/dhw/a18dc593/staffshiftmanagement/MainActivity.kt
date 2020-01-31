@@ -15,25 +15,31 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.log
 
-
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "MainActivity"
+    }
+
     private lateinit var auth: FirebaseAuth
 
-    val myPREFERENCES = "MyPrefs"
-    var sharedpreferences: SharedPreferences? = null
+    private val myPREFERENCES = "MyPrefs"
+    private var mySharedPreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
-        if(!sharedpreferences!!.contains("email")){
+        mySharedPreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
+        if(!mySharedPreferences!!.contains("email")){
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-        if(sharedpreferences!!.contains("loginUserName")){
-            var loginUserStr = findViewById<TextView>(R.id.loginUser)
-            loginUserStr.text = "ログインユーザー: "+sharedpreferences!!.getString("loginUserName",null)
+        if(mySharedPreferences!!.contains("loginUserName")){
+            val loginUserStr = findViewById<TextView>(R.id.loginUser)
+            val loginUserName =
+                mySharedPreferences!!.getString("loginUserName",null)?.toString()
+            loginUserStr.text = "ログインユーザー: $loginUserName"
         }
 
         auth = FirebaseAuth.getInstance()
@@ -44,14 +50,14 @@ class MainActivity : AppCompatActivity() {
             .build()
         db.firestoreSettings = settings
 
-        val userEmail = sharedpreferences!!.getString("email", null).toString()
+        val userEmail = mySharedPreferences!!.getString("email", null)?.toString()
 
         db.collection("users").whereEqualTo("email", userEmail)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     for(fields in document.data){
-                        Log.w(TAG, "Field Data: "+fields)
+                        Log.w(TAG, "Field Data: $fields")
                         val fieldData = fields.toString().split("=")
                         if(fieldData[0] == "userName"){
                             val userNameStr = "ログインユーザー: "+fieldData[1]
@@ -65,9 +71,8 @@ class MainActivity : AppCompatActivity() {
                 Log.w(TAG, "Error getting documents: ", exception)
             }
 
-        val layoutManager =
-            androidx.recyclerview.widget.LinearLayoutManager(this)
-        layoutManager.orientation = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
         mainMenuRecyclerView.layoutManager = layoutManager
 
         val adapter = MainMenuItemsAdapter(this, Supplier.menu_items)
@@ -86,20 +91,14 @@ class MainActivity : AppCompatActivity() {
         auth.signInAnonymously()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInAnonymously:success")
-                    val user = auth.currentUser
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInAnonymously:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
+                    Toast.makeText(baseContext,
+                        "認証出来ません。もう一度ログインしてください。.",
                         Toast.LENGTH_SHORT).show()
                 }
             }
-        // [END signin_anonymously]
     }
 
-    companion object {
-        private const val TAG = "AnonymousAuth"
-    }
 }

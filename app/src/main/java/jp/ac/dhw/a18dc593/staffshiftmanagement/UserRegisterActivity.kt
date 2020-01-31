@@ -12,12 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 class UserRegisterActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG = "UserRegister"
+        private const val TAG = "UserRegisterActivity"
     }
 
     private lateinit var databaseReference: DatabaseReference
@@ -39,23 +38,27 @@ class UserRegisterActivity : AppCompatActivity() {
             val userEmail = findViewById<TextView>(R.id.txtUserEmail).text.toString()
             val userPassword = findViewById<TextView>(R.id.txtUserPassword).text.toString()
             var userRole = findViewById<Spinner>(R.id.spnRole).selectedItem.toString()
-            if(userRole.equals("一般ユーザー", false)){
-                userRole = "user"
-            } else {
-                userRole = "admin"
+            when {
+                (userRole.equals("一般ユーザー", false)) ->{
+                    userRole = "user"
+                }
+                else -> {
+                    userRole = "admin"
+                }
             }
-
-            if(TextUtils.isEmpty(userName)){
-                Toast.makeText(baseContext, "ユーザー名を入力してください。",
-                    Toast.LENGTH_SHORT).show()
-            } else if(TextUtils.isEmpty(userEmail)){
-                Toast.makeText(baseContext, "メールアドレスを入力してください。",
-                    Toast.LENGTH_SHORT).show()
-            } else if(TextUtils.isEmpty(userPassword)){
-                Toast.makeText(baseContext, "パスワードを入力してください。",
-                    Toast.LENGTH_SHORT).show()
-            } else {
-                submitFlag = true
+            when{
+                (TextUtils.isEmpty(userName)) ->{
+                    Toast.makeText(baseContext, "ユーザー名を入力してください。",
+                        Toast.LENGTH_SHORT).show()
+                } (TextUtils.isEmpty(userEmail)) ->{
+                    Toast.makeText(baseContext, "メールアドレスを入力してください。",
+                        Toast.LENGTH_SHORT).show()
+                } (TextUtils.isEmpty(userPassword)) ->{
+                    Toast.makeText(baseContext, "パスワードを入力してください。",
+                        Toast.LENGTH_SHORT).show()
+                } else -> {
+                    submitFlag = true
+                }
             }
 
             if(submitFlag){
@@ -89,7 +92,7 @@ class UserRegisterActivity : AppCompatActivity() {
         val btnUserEditBack = findViewById<Button>(R.id.btnUserEditBack)
 
         btnUserEditBack.setOnClickListener {
-            var intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }

@@ -128,7 +128,7 @@ class ShiftListActivity : AppCompatActivity() {
             val btnShiftListBack = findViewById<Button>(R.id.btnShiftListBack)
 
             btnShiftListBack.setOnClickListener {
-                val redirectIntent = Intent(this, MainActivity::class.java)
+                val redirectIntent = Intent(this, ShiftDateActivity::class.java)
                 startActivity(redirectIntent)
             }
         }
