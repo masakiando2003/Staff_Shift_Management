@@ -47,11 +47,6 @@
         <item>24時間前</item>
         <item>48時間前</item>
     </string-array>
-    <string-array name="users_array">
-        <item>User1</item>
-        <item>User2</item>
-        <item>User3</item>
-    </string-array>
     <string-array name="user_action_array">
         <item>編集</item>
         <item>削除</item>

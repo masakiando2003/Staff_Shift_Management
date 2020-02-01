@@ -50,18 +50,15 @@
         app:layout_constraintTop_toBottomOf="@+id/lblMemo"
         app:layout_constraintVertical_bias="0.43" />
 
-    <TextView
-        android:id="@+id/txtUserName"
-        android:layout_width="166dp"
-        android:layout_height="26dp"
+    <Spinner
+        android:id="@+id/spnUserName"
+        android:layout_width="232dp"
+        android:layout_height="31dp"
         android:layout_marginTop="100dp"
-        android:layout_marginEnd="72dp"
+        android:layout_marginEnd="24dp"
         android:ems="10"
-        android:hint="@string/userName"
-        android:visibility="visible"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.756"
-        app:layout_constraintStart_toEndOf="@+id/lblUserName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
@@ -117,7 +114,7 @@
         android:inputType="date"
         android:onClick="showDatePickerDialog"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/spnUserName" />
 
     <TextView
         android:id="@+id/lblAttendDate"

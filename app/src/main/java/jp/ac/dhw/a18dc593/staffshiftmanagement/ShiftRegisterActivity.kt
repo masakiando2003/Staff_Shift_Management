@@ -11,11 +11,12 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import java.text.SimpleDateFormat
 import java.util.*
 
-class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener, 
+
+class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
     companion object {
@@ -24,6 +25,8 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
 
     private var timePickerID: String? = null
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var userListReference: DatabaseReference
+    private lateinit var userListListener: ValueEventListener
     private val myPREFERENCES = "MyPrefs"
     private var mySharedPreferences: SharedPreferences? = null
 
@@ -36,15 +39,61 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-        val userRole = intent!!.getStringExtra("loginUserRole")
-        if(userRole == "admin"){
-            val userName = findViewById<TextView>(R.id.txtUserName)
-        } else {
-            if(mySharedPreferences!!.contains("loginUserName")){
-                val loginUserStr = findViewById<TextView>(R.id.txtUserName)
-                loginUserStr.text = mySharedPreferences!!.getString("loginUserName",null)
+
+        val loginUserName = mySharedPreferences!!.getString("loginUserName",
+            null)
+        val loginUserRole = mySharedPreferences!!.getString("loginUserRole",
+            null)
+        Log.d(TAG, "loginUserRole: $loginUserRole")
+
+        val userNameArr = arrayListOf<String>()
+        databaseReference = FirebaseDatabase.getInstance().reference
+        userListReference = databaseReference.child("users")
+        userListListener = object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d(
+                    TAG, "Number of messages for userListListener: " +
+                            "${dataSnapshot.childrenCount}"
+                )
+                dataSnapshot.children.forEach { child ->
+                    Log.d(TAG,
+                        "Key: ${child.key.toString()}, Value: ${child.value.toString()}")
+                    val user = child.key.toString()
+                    userNameArr.add(user)
+                }
+                val userNameSpinner = findViewById<Spinner>(R.id.spnUserName)
+                val adapter =
+                    ArrayAdapter(
+                        this@ShiftRegisterActivity,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        userNameArr
+                    )
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                userNameSpinner!!.adapter = adapter
+                userNameSpinner.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parentView: AdapterView<*>,
+                                                selectedItemView: View, position: Int, id: Long) {
+                    }
+
+                    override fun onNothingSelected(parentView: AdapterView<*>) {
+                    }
+                }
+                val spinnerPosition = adapter.getPosition(loginUserName)
+                userNameSpinner.setSelection(spinnerPosition)
+                if(loginUserRole != "admin"){
+                    userNameSpinner.isEnabled = false
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "userListListener:onCancelled: ${error.message}")
             }
         }
+        userListReference.addValueEventListener(userListListener)
+
+
 
         val btnShiftEditBack = findViewById<Button>(R.id.btnShiftEditBack)
 
@@ -58,11 +107,16 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
         btnSubmit.setOnClickListener {
             var submitFlag = false
 
-            val userName = findViewById<TextView>(R.id.txtUserName).text.toString()
+            val userName = findViewById<Spinner>(R.id.spnUserName).selectedItem.toString()
             val attendDate = findViewById<TextView>(R.id.txtAttendDate).text.toString()
             val attendTime = findViewById<TextView>(R.id.txtAttendTime).text.toString()
             val endTime = findViewById<TextView>(R.id.txtEndTime).text.toString()
             val memo = findViewById<TextView>(R.id.txtMemo).text.toString()
+
+            val timeSDF = SimpleDateFormat("hh:mm", Locale.JAPAN)
+            val inTime: Date = timeSDF.parse(attendTime)
+            val outTime: Date = timeSDF.parse(endTime)
+            Log.d(TAG, "inTime: $inTime, outTime: $outTime")
 
             when{
                 (TextUtils.isEmpty(attendDate)) -> {
@@ -75,6 +129,10 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
                 }
                 (TextUtils.isEmpty(endTime)) -> {
                     Toast.makeText(baseContext, "終了時間を入力してください。",
+                        Toast.LENGTH_SHORT).show()
+                }
+                (outTime.before(inTime)) -> {
+                    Toast.makeText(baseContext, "終了時間は出勤時間の後に入力してください。",
                         Toast.LENGTH_SHORT).show()
                 }
                 else -> {
@@ -154,5 +212,4 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
         val newFragment = ShiftRegisterTimePick()
         newFragment.show(supportFragmentManager, "timePicker")
     }
-
 }

@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.database.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener,
@@ -27,9 +28,11 @@ class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
     private lateinit var shiftEditRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
     private lateinit var shiftEditListener: ValueEventListener
+    private lateinit var userListReference: DatabaseReference
+    private lateinit var userListListener: ValueEventListener
 
     private val myPREFERENCES = "MyPrefs"
-    private var sharedpreferences: SharedPreferences? = null
+    private var mySharedPreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,20 +44,66 @@ class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
         val txtAttendDate = findViewById<TextView>(R.id.txtAttendDate)
         txtAttendDate.text = shiftDateFormatted
 
-        sharedpreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
-        if(!sharedpreferences!!.contains("email")){
+        mySharedPreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
+        if(!mySharedPreferences!!.contains("email")){
             val loginIntent = Intent(this, LogInActivity::class.java)
             startActivity(loginIntent)
         }
-        else if(sharedpreferences!!.contains("loginUserName")){
-            val loginUserStr = findViewById<TextView>(R.id.txtUserName)
-            loginUserStr.text = sharedpreferences!!.getString("loginUserName",
-                null)
-        }
+        val loginUserRole = mySharedPreferences!!.getString("loginUserRole",
+            null)
 
         if(oldUserName != null && !TextUtils.isEmpty(oldUserName) &&
             shiftDateFormatted != null && !TextUtils.isEmpty(shiftDateFormatted) &&
             shiftDate != null && !TextUtils.isEmpty(shiftDate)){
+
+
+            val userNameArr = arrayListOf<String>()
+            databaseReference = FirebaseDatabase.getInstance().reference
+            userListReference = databaseReference.child("users")
+            userListListener = object : ValueEventListener {
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    Log.d(TAG, "Number of messages for userListListener: " +
+                                "${dataSnapshot.childrenCount}"
+                    )
+                    dataSnapshot.children.forEach { child ->
+                        Log.d(TAG,
+                            "Key: ${child.key.toString()}, Value: ${child.value.toString()}")
+                        val user = child.key.toString()
+                        userNameArr.add(user)
+                    }
+                    val userNameSpinner = findViewById<Spinner>(R.id.spnUserName)
+                    val adapter =
+                        ArrayAdapter(
+                            this@ShiftEditActivity,
+                            android.R.layout.simple_spinner_dropdown_item,
+                            userNameArr
+                        )
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    userNameSpinner!!.adapter = adapter
+                    userNameSpinner.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parentView: AdapterView<*>,
+                                                        selectedItemView: View,
+                                                        position: Int, id: Long) {
+                            }
+
+                            override fun onNothingSelected(parentView: AdapterView<*>) {
+                            }
+                        }
+                    val spinnerPosition = adapter.getPosition(oldUserName)
+                    userNameSpinner.setSelection(spinnerPosition)
+                    if(loginUserRole != "admin"){
+                        userNameSpinner.isEnabled = false
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "userListListener:onCancelled: ${error.message}")
+                }
+            }
+            userListReference.addValueEventListener(userListListener)
+
             databaseReference = FirebaseDatabase.getInstance().reference
             shiftEditRef = databaseReference.child("shift_list")
                 .child(shiftDate).child(oldUserName)
@@ -112,11 +161,16 @@ class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
         btnSubmit.setOnClickListener {
             var submitFlag = false
 
-            val userName = findViewById<TextView>(R.id.txtUserName).text.toString()
+            val userName = findViewById<Spinner>(R.id.spnUserName).selectedItem.toString()
             val attendDate = findViewById<TextView>(R.id.txtAttendDate).text.toString()
             val attendTime = findViewById<TextView>(R.id.txtAttendTime).text.toString()
             val endTime = findViewById<TextView>(R.id.txtEndTime).text.toString()
             val memo = findViewById<TextView>(R.id.txtMemo).text.toString()
+
+            val timeSDF = SimpleDateFormat("hh:mm", Locale.JAPAN)
+            val inTime: Date = timeSDF.parse(attendTime)
+            val outTime: Date = timeSDF.parse(endTime)
+            Log.d(TAG, "inTime: $inTime, outTime: $outTime")
 
             when{
                 (TextUtils.isEmpty(attendDate)) -> {
@@ -129,6 +183,10 @@ class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
                 }
                 (TextUtils.isEmpty(endTime)) -> {
                     Toast.makeText(baseContext, "終了時間を入力してください。",
+                        Toast.LENGTH_SHORT).show()
+                }
+                (outTime.before(inTime)) -> {
+                    Toast.makeText(baseContext, "終了時間は出勤時間の後に入力してください。",
                         Toast.LENGTH_SHORT).show()
                 }
                 else -> {
