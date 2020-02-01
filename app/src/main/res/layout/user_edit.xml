@@ -5,13 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/btnUserRegisterSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/submit"
+        app:layout_constraintEnd_toEndOf="@+id/spnRole"
+        app:layout_constraintHorizontal_bias="0.905"
+        app:layout_constraintStart_toStartOf="@+id/spnRole"
+        app:layout_constraintTop_toBottomOf="@+id/spnRole" />
 
     <EditText
         android:id="@+id/txtUserName"
         android:layout_width="211dp"
         android:layout_height="45dp"
-        android:layout_marginTop="168dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="236dp"
+        android:layout_marginEnd="40dp"
         android:autofillHints="@string/userName"
         android:ems="10"
         android:hint="@string/userName"
@@ -19,24 +29,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnUserEditBack"
+    <TextView
+        android:id="@+id/lblUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:text="@string/back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnUserRegisterSubmit"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="244dp"
+        android:text="@string/userName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblRole"
-        app:layout_constraintVertical_bias="0.297" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lblEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
         android:text="@string/email"
         app:layout_constraintEnd_toEndOf="@+id/lblUserName"
         app:layout_constraintHorizontal_bias="0.0"
@@ -44,61 +51,58 @@
         app:layout_constraintTop_toBottomOf="@+id/lblUserName" />
 
     <TextView
-        android:id="@+id/lblRole"
+        android:id="@+id/lblPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/role"
-        app:layout_constraintEnd_toEndOf="@+id/lblPassword"
-        app:layout_constraintHorizontal_bias="0.285"
-        app:layout_constraintStart_toStartOf="@+id/lblPassword"
-        app:layout_constraintTop_toBottomOf="@+id/lblPassword" />
-
-    <TextView
-        android:id="@+id/lblUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="176dp"
-        android:text="@string/userName"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="52dp"
+        android:text="@string/password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/lblEmail" />
 
     <EditText
         android:id="@+id/txtUserPassword"
         android:layout_width="177dp"
         android:layout_height="46dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="19dp"
         android:autofillHints="@string/password"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintHorizontal_bias="0.477"
         app:layout_constraintStart_toEndOf="@+id/lblPassword"
         app:layout_constraintTop_toBottomOf="@+id/txtUserEmail" />
 
     <TextView
-        android:id="@+id/lblPassword"
+        android:id="@+id/lblRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="@string/role"
+        app:layout_constraintEnd_toEndOf="@+id/lblPassword"
+        app:layout_constraintStart_toStartOf="@+id/lblPassword"
+        app:layout_constraintTop_toBottomOf="@+id/lblPassword" />
+
+    <Spinner
+        android:id="@+id/spnRole"
+        android:layout_width="204dp"
+        android:layout_height="43dp"
         android:layout_marginStart="72dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="36dp"
-        android:text="@string/password"
-        app:layout_constraintEnd_toEndOf="@+id/lblEmail"
-        app:layout_constraintEnd_toStartOf="@+id/txtPassword"
-        app:layout_constraintHorizontal_bias="0.789"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblEmail" />
+        android:layout_marginTop="20dp"
+        android:entries="@array/role_array"
+        android:prompt="@string/prompt"
+        app:layout_constraintStart_toEndOf="@+id/lblRole"
+        app:layout_constraintTop_toBottomOf="@+id/txtUserPassword" />
 
     <EditText
         android:id="@+id/txtUserEmail"
         android:layout_width="191dp"
         android:layout_height="43dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
+        android:autofillHints="@string/email"
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
@@ -106,51 +110,59 @@
         app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
 
     <Button
+        android:id="@+id/btnUserEditBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="128dp"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnUserRegisterSubmit"
+        app:layout_constraintTop_toBottomOf="@+id/lblRole"
+        app:layout_constraintVertical_bias="0.517" />
+
+    <Button
         android:id="@+id/btnUserDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="68dp"
         android:background="@color/colorAccent"
         android:text="@string/delete"
         android:textColor="@color/cardview_light_background"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.535"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imgUserAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="188dp"
+        android:autofillHints="@string/userAvatar"
+        android:contentDescription="@string/userAvatar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/userAvatar" />
-
-    <Spinner
-        android:id="@+id/spnRole"
-        android:layout_width="204dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="28dp"
-        android:entries="@array/role_array"
-        android:prompt="@string/prompt"
-        app:layout_constraintStart_toEndOf="@+id/lblRole"
-        app:layout_constraintTop_toBottomOf="@+id/txtUserPassword" />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/btnUserRegisterSubmit"
+        android:id="@+id/btnSelectAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="@string/submit"
-        app:layout_constraintEnd_toEndOf="@+id/spnRole"
-        app:layout_constraintHorizontal_bias="0.724"
-        app:layout_constraintStart_toStartOf="@+id/spnRole"
-        app:layout_constraintTop_toBottomOf="@+id/spnRole" />
+        android:layout_marginEnd="56dp"
+        android:text="@string/selectAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnRemoveAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="84dp"
+        android:text="@string/removeAvatar"
+        app:layout_constraintBottom_toTopOf="@+id/txtUserName"
+        app:layout_constraintStart_toStartOf="@+id/btnSelectAvatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

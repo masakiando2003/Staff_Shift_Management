@@ -3,23 +3,24 @@ package jp.ac.dhw.a18dc593.staffshiftmanagement
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import org.json.JSONObject
 import java.io.Serializable
+import java.util.*
+import kotlin.collections.ArrayList
 
 class UserListActivity : AppCompatActivity() {
     
@@ -31,8 +32,10 @@ class UserListActivity : AppCompatActivity() {
     private var mySharedPreferences: SharedPreferences? = null
 
     private lateinit var userListRef: DatabaseReference
+    private lateinit var userDetailRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userListListener: ValueEventListener
+    private lateinit var userDetailListener: ValueEventListener
     
     private var userRecyclerListView: RecyclerView? = null
     private var userRecyclerAdapter: UserListAdapter? = null
@@ -59,15 +62,25 @@ class UserListActivity : AppCompatActivity() {
         userListListener = object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d(TAG, "Number of messages: " +
-                        "${dataSnapshot.childrenCount}")
                 dataSnapshot.children.forEach { child ->
+                    val userName = child.key!!.toString()
                     userRecyclerAdapter = null
                     userRecyclerListView!!.adapter = userRecyclerAdapter
 
                     val parentUserDataItem = UserListItem()
-                    parentUserDataItem.userName=child.key!!.toString()
-
+                    parentUserDataItem.userName = userName
+                    val json = child.value.toString()
+                    val tempStr = json.substring(1, json.length-1).replace("\\s".toRegex(),
+                        "")
+                    val tempArr = tempStr.split(",")
+                    tempArr.forEach { keyValue ->
+                        val keyValueArr = keyValue.split("=")
+                        val key = keyValueArr[0]
+                        val value = keyValueArr[1]
+                        if(key == "avatarBase64"){
+                            parentUserDataItem.userAvatarBase64 = value
+                        }
+                    }
                     val userActionItems = arrayListOf<UserActionItem>()
                     var userActionItem: UserActionItem
                     userActionItem = UserActionItem()
@@ -86,6 +99,7 @@ class UserListActivity : AppCompatActivity() {
                     parentUserDataItem.userActionItems=userActionItems
                     userDataItems.add(parentUserDataItem)
                 }
+                Log.d(TAG, "userDataItems: $userDataItems")
                 val layoutManager = LinearLayoutManager(this@UserListActivity)
                 userRecyclerListView!!.layoutManager = layoutManager
                 userRecyclerAdapter = UserListAdapter(this@UserListActivity,
@@ -99,7 +113,7 @@ class UserListActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "messages:onCancelled: ${error.message}")
+                Log.e(TAG, "userListListener:onCancelled: ${error.message}")
             }
         }
         userListRef.addValueEventListener(userListListener)
@@ -126,6 +140,14 @@ class UserListActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder:UserListViewHolder, position: Int) {
             val userListItem = mData[position]
             holder.userName.text = userListItem.userName
+            Log.d(TAG, "userListItem.userAvatarBase64: " +
+                    "${userListItem.userAvatarBase64}")
+            if(userListItem.userAvatarBase64 != null){
+                val avatarBytes = Base64.getDecoder().decode(userListItem.userAvatarBase64)
+                val decodedImage = BitmapFactory.decodeByteArray(avatarBytes,
+                    0, avatarBytes.size)
+                holder.userAvatar.setImageBitmap(decodedImage)
+            }
             val noOfChildTextViews = holder.linearLayoutChildItems.childCount
             val noOfChild = userListItem.userActionItems!!.size
             if (noOfChild < noOfChildTextViews) {
@@ -149,7 +171,9 @@ class UserListActivity : AppCompatActivity() {
         inner class UserListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
             internal var userName: TextView = itemView.findViewById(R.id.userName)
-            val linearLayoutChildItems: LinearLayout  = itemView.findViewById(R.id.ll_child_items)
+            internal var userAvatar: ImageView = itemView.findViewById(R.id.imgULUserAvatar)
+            internal var arrowDown: TextView = itemView.findViewById(R.id.arrowDown)
+            val linearLayoutChildItems: LinearLayout = itemView.findViewById(R.id.ll_child_items)
 
             init {
                 linearLayoutChildItems.visibility = View.GONE
@@ -163,8 +187,6 @@ class UserListActivity : AppCompatActivity() {
                     textView.id = indexView
                     textView.gravity = Gravity.START
                     textView.setPadding(80, 60, 0, 60)
-                    /*textView.background =
-                        ContextCompat.getDrawable(context, R.drawable.ic_keyboard_arrow_down_black_24dp)*/
                     val layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
@@ -172,15 +194,19 @@ class UserListActivity : AppCompatActivity() {
                     textView.setOnClickListener(this)
                     linearLayoutChildItems.addView(textView, layoutParams)
                 }
-                userName.setOnClickListener(this)
+                arrowDown.setOnClickListener(this)
             }
 
             override fun onClick(view: View) {
-                if (view.id == R.id.userName) {
+                if (view.id == R.id.arrowDown) {
                     if (linearLayoutChildItems.visibility == View.VISIBLE) {
                         linearLayoutChildItems.visibility = View.GONE
+                        val arrow: TextView = itemView.findViewById(R.id.arrowDown)
+                        arrow.setBackgroundResource(R.drawable.ic_keyboard_arrow_down_black_12dp)
                     } else {
                         linearLayoutChildItems.visibility = View.VISIBLE
+                        val arrow: TextView = itemView.findViewById(R.id.arrowDown)
+                        arrow.setBackgroundResource(R.drawable.ic_keyboard_arrow_up_black_12dp)
                     }
                 } else {
                     val textViewClicked = view as TextView
@@ -225,6 +251,7 @@ class UserListActivity : AppCompatActivity() {
 
     private inner class UserListItem : Serializable {
         var userName: String? = null
+        var userAvatarBase64: String? = null
         var userActionItems: ArrayList<UserActionItem>? = null
     }
 

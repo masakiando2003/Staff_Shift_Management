@@ -7,5 +7,6 @@ data class UserModel(
     val name: String?,
     val email: String?,
     val password: String?,
-    val role: String?
+    val role: String?,
+    val avatarBase64: String?
 )

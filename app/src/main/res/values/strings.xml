@@ -12,6 +12,8 @@
     <string name="password">パスワード</string>
     <string name="role">権限</string>
     <string name="login">ログイン</string>
+    <string name="selectAvatar">アバター選択</string>
+    <string name="removeAvatar">アバター削除</string>
     <string name="back">戻る</string>
     <string name="submit">登録</string>
     <string name="edit">編集</string>
@@ -35,17 +37,6 @@
     <string-array name="role_array">
         <item>一般ユーザー</item>
         <item>管理者</item>
-    </string-array>
-    <string-array name="answer_array">
-        <item>はい</item>
-        <item>いいえ</item>
-    </string-array>
-    <string-array name="remind_time_array">
-        <item>1時間前</item>
-        <item>3時間前</item>
-        <item>12時間前</item>
-        <item>24時間前</item>
-        <item>48時間前</item>
     </string-array>
     <string-array name="user_action_array">
         <item>編集</item>

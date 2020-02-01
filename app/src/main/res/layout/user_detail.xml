@@ -9,45 +9,89 @@
         android:id="@+id/txtUserDetailName"
         android:layout_width="211dp"
         android:layout_height="40dp"
-        android:layout_marginTop="176dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/userName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtUserDetailEmail"
-        android:layout_width="191dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="28dp"
-        android:ems="10"
-        android:hint="@string/email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUserDetailName" />
+        android:id="@+id/lblUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="256dp"
+        android:text="@string/userName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/email"
+        app:layout_constraintEnd_toEndOf="@+id/lblUserName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/lblUserName"
+        app:layout_constraintTop_toBottomOf="@+id/lblUserName" />
+
+    <TextView
+        android:id="@+id/lblPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="101dp"
+        android:text="@string/password"
+        app:layout_constraintEnd_toStartOf="@+id/txtUserDetailPassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblEmail" />
 
     <TextView
         android:id="@+id/txtUserDetailPassword"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="168dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="56dp"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword"
-        app:layout_constraintStart_toEndOf="@+id/lblPassword"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtUserDetailEmail" />
+
+    <TextView
+        android:id="@+id/lblRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/role"
+        app:layout_constraintEnd_toEndOf="@+id/lblPassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/lblPassword"
+        app:layout_constraintTop_toBottomOf="@+id/lblPassword" />
 
     <TextView
         android:id="@+id/txtUserDetailRole"
         android:layout_width="204dp"
         android:layout_height="43dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="28dp"
         android:hint="@string/role"
         app:layout_constraintStart_toEndOf="@+id/lblRole"
         app:layout_constraintTop_toBottomOf="@+id/txtUserDetailPassword" />
+
+    <TextView
+        android:id="@+id/txtUserDetailEmail"
+        android:layout_width="191dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="36dp"
+        android:ems="10"
+        android:hint="@string/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUserDetailName" />
 
     <Button
         android:id="@+id/btnUserDetailBack"
@@ -60,54 +104,10 @@
         app:layout_constraintTop_toBottomOf="@+id/lblRole"
         app:layout_constraintVertical_bias="0.36" />
 
-    <TextView
-        android:id="@+id/lblEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="@string/email"
-        app:layout_constraintEnd_toEndOf="@+id/lblUserName"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/lblUserName"
-        app:layout_constraintTop_toBottomOf="@+id/lblUserName" />
-
-    <TextView
-        android:id="@+id/lblRole"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="@string/role"
-        app:layout_constraintEnd_toEndOf="@+id/lblPassword"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/lblPassword"
-        app:layout_constraintTop_toBottomOf="@+id/lblPassword" />
-
-    <TextView
-        android:id="@+id/lblUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="176dp"
-        android:text="@string/userName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/lblPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="48dp"
-        android:text="@string/password"
-        app:layout_constraintEnd_toStartOf="@+id/txtUserDetailPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblEmail" />
-
     <ImageView
         android:id="@+id/imgUserAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/userAvatar"
         app:layout_constraintEnd_toEndOf="parent"

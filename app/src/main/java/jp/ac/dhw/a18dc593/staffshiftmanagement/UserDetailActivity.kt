@@ -1,12 +1,14 @@
 package jp.ac.dhw.a18dc593.staffshiftmanagement
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
+import java.util.*
 
 class UserDetailActivity : AppCompatActivity() {
 
@@ -17,6 +19,7 @@ class UserDetailActivity : AppCompatActivity() {
     private lateinit var userDetailRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userDetailListener: ValueEventListener
+    private var avatarBase64: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,14 @@ class UserDetailActivity : AppCompatActivity() {
                         val field = child.key.toString()
                         val value = child.value.toString()
                         when {
+                            (field == "avatarBase64") -> {
+                                avatarBase64 = value
+                                val avatarBytes = Base64.getDecoder().decode(avatarBase64)
+                                val decodedImage = BitmapFactory.decodeByteArray(avatarBytes,
+                                    0, avatarBytes.size)
+                                val imgUserAvatar = findViewById<ImageView>(R.id.imgUserAvatar)
+                                imgUserAvatar.setImageBitmap(decodedImage)
+                            }
                             (field == "email") -> {
                                 val userEmail =
                                     findViewById<TextView>(R.id.txtUserDetailEmail)
