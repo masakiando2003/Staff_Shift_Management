@@ -3,16 +3,14 @@ package jp.ac.dhw.a18dc593.staffshiftmanagement
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import java.io.Serializable
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ShiftListActivity : AppCompatActivity() {
 
@@ -31,7 +31,9 @@ class ShiftListActivity : AppCompatActivity() {
     var sharedpreferences: SharedPreferences? = null
 
     private lateinit var shiftListRef: DatabaseReference
+    private lateinit var userRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var userListener: ValueEventListener
     private lateinit var shiftListListener: ValueEventListener
 
     private var shiftRecyclerListView: RecyclerView? = null
@@ -80,42 +82,63 @@ class ShiftListActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT).show()
                     } else {
                         dataSnapshot.children.forEach { child ->
-                            shiftListRecyclerAdapter = null
-                            shiftRecyclerListView!!.adapter = shiftListRecyclerAdapter
+                            val user = child.key!!.toString()
 
                             val parentShiftDataItem = ShiftListItem()
-                            parentShiftDataItem.userName=child.key!!.toString()
+                            parentShiftDataItem.userName=user
 
-                            val shiftActionItems = arrayListOf<ShiftActionItem>()
-                            var shiftActionItem = ShiftActionItem()
-                            shiftActionItem.actionName=parentShiftDataItem.userName+
-                                    "の出勤データを見る"
-                            shiftActionItems.add(shiftActionItem)
-                            if(sharedpreferences!!.contains("loginUserRole") &&
-                                sharedpreferences!!.getString("loginUserRole",
-                                    null)?.toString() == "admin") {
-                                shiftActionItem = ShiftActionItem()
-                                shiftActionItem.actionName=parentShiftDataItem.userName+
-                                        "の出勤データを編集する"
-                                shiftActionItems.add(shiftActionItem)
-                                shiftActionItem = ShiftActionItem()
-                                shiftActionItem.actionName=parentShiftDataItem.userName+
-                                        "の出勤データを削除する"
-                                shiftActionItems.add(shiftActionItem)
+                            userRef = databaseReference.child("users")
+                                .child(user)
+                            userListener = object : ValueEventListener {
+                                override fun onDataChange(userDataSnapShot: DataSnapshot) {
+                                    shiftListRecyclerAdapter = null
+                                    shiftRecyclerListView!!.adapter = shiftListRecyclerAdapter
+                                    userDataSnapShot.children.forEach { child ->
+                                        val field = child.key.toString()
+                                        val value = child.value.toString()
+                                        if(field == "avatarBase64"){
+                                            parentShiftDataItem.userAvatarBase64 = value
+                                        }
+                                    }
+                                    val shiftActionItems = arrayListOf<ShiftActionItem>()
+                                    var shiftActionItem = ShiftActionItem()
+                                    shiftActionItem.actionName=parentShiftDataItem.userName+
+                                            "の出勤データを見る"
+                                    shiftActionItems.add(shiftActionItem)
+                                    if(sharedpreferences!!.contains("loginUserRole") &&
+                                        sharedpreferences!!.getString("loginUserRole",
+                                            null)?.toString() == "admin") {
+                                        shiftActionItem = ShiftActionItem()
+                                        shiftActionItem.actionName=parentShiftDataItem.userName+
+                                                "の出勤データを編集する"
+                                        shiftActionItems.add(shiftActionItem)
+                                        shiftActionItem = ShiftActionItem()
+                                        shiftActionItem.actionName=parentShiftDataItem.userName+
+                                                "の出勤データを削除する"
+                                        shiftActionItems.add(shiftActionItem)
+                                    }
+
+                                    parentShiftDataItem.shiftActionItems=shiftActionItems
+                                    shiftDataItems.add(parentShiftDataItem)
+
+
+                                    val layoutManager =
+                                        LinearLayoutManager(this@ShiftListActivity)
+                                    shiftRecyclerListView!!.layoutManager = layoutManager
+                                    shiftListRecyclerAdapter =
+                                        ShiftListAdapter(this@ShiftListActivity,
+                                            shiftDataItems)
+                                    shiftRecyclerListView!!.addItemDecoration(
+                                        DividerItemDecoration(shiftRecyclerListView!!.context,
+                                            layoutManager.orientation)
+                                    )
+                                    shiftRecyclerListView!!.adapter = shiftListRecyclerAdapter
+                                }
+                                override fun onCancelled(error: DatabaseError) {
+                                }
                             }
-
-                            parentShiftDataItem.shiftActionItems=shiftActionItems
-                            shiftDataItems.add(parentShiftDataItem)
+                            userRef.addValueEventListener(userListener)
                         }
-                        val layoutManager = LinearLayoutManager(this@ShiftListActivity)
-                        shiftRecyclerListView!!.layoutManager = layoutManager
-                        shiftListRecyclerAdapter = ShiftListAdapter(this@ShiftListActivity,
-                            shiftDataItems)
-                        shiftRecyclerListView!!.addItemDecoration(
-                            DividerItemDecoration(shiftRecyclerListView!!.context,
-                                layoutManager.orientation)
-                        )
-                        shiftRecyclerListView!!.adapter = shiftListRecyclerAdapter
                     }
                 }
 
@@ -148,6 +171,14 @@ class ShiftListActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: ShiftListViewHolder, position: Int) {
             val shiftListItem = mData[position]
             holder.staffName!!.text = shiftListItem.userName
+            Log.d(TAG, "userListItem.userAvatarBase64: " +
+                        "${shiftListItem.userAvatarBase64}")
+            if(shiftListItem.userAvatarBase64 != null){
+                val avatarBytes = Base64.getDecoder().decode(shiftListItem.userAvatarBase64)
+                val decodedImage = BitmapFactory.decodeByteArray(avatarBytes,
+                    0, avatarBytes.size)
+                holder.userAvatar.setImageBitmap(decodedImage)
+            }
             val noOfChildTextViews = holder.lLayoutChildItems!!.childCount
             val noOfChild = shiftListItem.shiftActionItems!!.size
             if (noOfChild < noOfChildTextViews) {
@@ -171,6 +202,8 @@ class ShiftListActivity : AppCompatActivity() {
         inner class ShiftListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
             internal var staffName: TextView? = itemView.findViewById(R.id.txtStaffName)
+            internal var userAvatar: ImageView = itemView.findViewById(R.id.imgULUserAvatar)
+            internal var arrowDown: TextView = itemView.findViewById(R.id.arrowDown)
             val lLayoutChildItems: LinearLayout? = itemView.findViewById(R.id.llShiftActions)
 
             init {
@@ -192,15 +225,19 @@ class ShiftListActivity : AppCompatActivity() {
                     textView.setOnClickListener(this)
                     lLayoutChildItems.addView(textView, layoutParams)
                 }
-                staffName!!.setOnClickListener(this)
+                arrowDown.setOnClickListener(this)
             }
 
             override fun onClick(view: View) {
-                if (view.id == R.id.txtStaffName) {
+                if (view.id == R.id.arrowDown) {
                     if (lLayoutChildItems!!.visibility == View.VISIBLE) {
                         lLayoutChildItems.visibility = View.GONE
+                        val arrow: TextView = itemView.findViewById(R.id.arrowDown)
+                        arrow.setBackgroundResource(R.drawable.ic_keyboard_arrow_down_black_12dp)
                     } else {
                         lLayoutChildItems.visibility = View.VISIBLE
+                        val arrow: TextView = itemView.findViewById(R.id.arrowDown)
+                        arrow.setBackgroundResource(R.drawable.ic_keyboard_arrow_up_black_12dp)
                     }
                 } else {
                     val textViewClicked = view as TextView
@@ -262,6 +299,7 @@ class ShiftListActivity : AppCompatActivity() {
 
     private inner class ShiftListItem : Serializable {
         var userName: String? = null
+        var userAvatarBase64: String? = null
         var shiftActionItems: ArrayList<ShiftActionItem>? = null
     }
     private inner class ShiftActionItem : Serializable {

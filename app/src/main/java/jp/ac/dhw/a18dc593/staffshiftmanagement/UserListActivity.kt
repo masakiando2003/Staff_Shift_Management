@@ -32,10 +32,8 @@ class UserListActivity : AppCompatActivity() {
     private var mySharedPreferences: SharedPreferences? = null
 
     private lateinit var userListRef: DatabaseReference
-    private lateinit var userDetailRef: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
     private lateinit var userListListener: ValueEventListener
-    private lateinit var userDetailListener: ValueEventListener
     
     private var userRecyclerListView: RecyclerView? = null
     private var userRecyclerAdapter: UserListAdapter? = null
