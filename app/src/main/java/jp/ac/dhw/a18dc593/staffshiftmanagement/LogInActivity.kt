@@ -12,7 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-
+import ir.drax.netwatch.NetWatch
+import ir.drax.netwatch.cb.NetworkChangeReceiver_navigator
 
 class LogInActivity : AppCompatActivity() {
 
@@ -34,6 +35,20 @@ class LogInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
+
+        NetWatch.builder(this)
+            .setIcon(R.drawable.ic_signal_wifi_off_black_12dp)
+            .setCallBack(object : NetworkChangeReceiver_navigator {
+                override fun onConnected(source: Int) {
+                }
+                override fun onDisconnected() {
+                    Toast.makeText(this@LogInActivity,
+                        "ネットワークにアクセス出来ません。" +
+                                "コネクションをチェックしてください。", Toast.LENGTH_SHORT).show()
+                }
+            })
+            .setNotificationCancelable(false)
+            .build()
 
         mySharedPreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
         val editor = mySharedPreferences!!.edit()

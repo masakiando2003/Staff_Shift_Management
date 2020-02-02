@@ -13,6 +13,8 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.database.*
+import ir.drax.netwatch.NetWatch
+import ir.drax.netwatch.cb.NetworkChangeReceiver_navigator
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,6 +39,20 @@ class ShiftEditActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shift_edit)
+
+        NetWatch.builder(this)
+            .setIcon(R.drawable.ic_signal_wifi_off_black_12dp)
+            .setCallBack(object : NetworkChangeReceiver_navigator {
+                override fun onConnected(source: Int) {
+                }
+                override fun onDisconnected() {
+                    Toast.makeText(this@ShiftEditActivity,
+                        "ネットワークにアクセス出来ません。" +
+                                "コネクションをチェックしてください。", Toast.LENGTH_SHORT).show()
+                }
+            })
+            .setNotificationCancelable(false)
+            .build()
 
         val oldUserName = intent!!.getStringExtra("userName")
         val shiftDateFormatted = intent!!.getStringExtra("shiftDateFormatted")

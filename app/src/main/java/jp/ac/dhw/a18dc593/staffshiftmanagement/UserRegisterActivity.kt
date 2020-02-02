@@ -18,6 +18,8 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import ir.drax.netwatch.NetWatch
+import ir.drax.netwatch.cb.NetworkChangeReceiver_navigator
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -42,6 +44,20 @@ class UserRegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_edit)
+
+        NetWatch.builder(this)
+            .setIcon(R.drawable.ic_signal_wifi_off_black_12dp)
+            .setCallBack(object : NetworkChangeReceiver_navigator {
+                override fun onConnected(source: Int) {
+                }
+                override fun onDisconnected() {
+                    Toast.makeText(this@UserRegisterActivity,
+                        "ネットワークにアクセス出来ません。" +
+                                "コネクションをチェックしてください。", Toast.LENGTH_SHORT).show()
+                }
+            })
+            .setNotificationCancelable(false)
+            .build()
 
         databaseReference = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()

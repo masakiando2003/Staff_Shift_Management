@@ -28,7 +28,7 @@ class ShiftListDatePick : DialogFragment(), DatePickerDialog.OnDateSetListener {
                            monthOfYear: Int, dayOfMonth: Int) {
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         val intent = Intent(context, MainActivity::class.java)
         startActivity(intent)

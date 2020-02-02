@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import ir.drax.netwatch.NetWatch
+import ir.drax.netwatch.cb.NetworkChangeReceiver_navigator
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +32,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        NetWatch.builder(this)
+            .setIcon(R.drawable.ic_signal_wifi_off_black_12dp)
+            .setCallBack(object : NetworkChangeReceiver_navigator {
+                override fun onConnected(source: Int) {
+                }
+                override fun onDisconnected() {
+                    Toast.makeText(this@MainActivity,
+                        "ネットワークにアクセス出来ません。" +
+                                "コネクションをチェックしてください。", Toast.LENGTH_SHORT).show()
+                }
+            })
+            .setNotificationCancelable(false)
+            .build()
 
         mySharedPreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
         if(!mySharedPreferences!!.contains("email")){

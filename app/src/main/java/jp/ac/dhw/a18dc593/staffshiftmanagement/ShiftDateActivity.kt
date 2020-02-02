@@ -7,7 +7,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import ir.drax.netwatch.NetWatch
+import ir.drax.netwatch.cb.NetworkChangeReceiver_navigator
 import java.util.*
 
 class ShiftDateActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener {
@@ -22,6 +25,20 @@ class ShiftDateActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shift_date)
+
+        NetWatch.builder(this)
+            .setIcon(R.drawable.ic_signal_wifi_off_black_12dp)
+            .setCallBack(object : NetworkChangeReceiver_navigator {
+                override fun onConnected(source: Int) {
+                }
+                override fun onDisconnected() {
+                    Toast.makeText(this@ShiftDateActivity,
+                        "ネットワークにアクセス出来ません。" +
+                                "コネクションをチェックしてください。", Toast.LENGTH_SHORT).show()
+                }
+            })
+            .setNotificationCancelable(false)
+            .build()
 
         sharedReferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
         if(!sharedReferences!!.contains("email")){

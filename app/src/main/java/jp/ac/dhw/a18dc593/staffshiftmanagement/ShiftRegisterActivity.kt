@@ -12,9 +12,10 @@ import android.view.View
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.database.*
+import ir.drax.netwatch.NetWatch
+import ir.drax.netwatch.cb.NetworkChangeReceiver_navigator
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
@@ -33,6 +34,20 @@ class ShiftRegisterActivity : FragmentActivity(), DatePickerDialog.OnDateSetList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.shift_edit)
+
+        NetWatch.builder(this)
+            .setIcon(R.drawable.ic_signal_wifi_off_black_12dp)
+            .setCallBack(object : NetworkChangeReceiver_navigator {
+                override fun onConnected(source: Int) {
+                }
+                override fun onDisconnected() {
+                    Toast.makeText(this@ShiftRegisterActivity,
+                        "ネットワークにアクセス出来ません。" +
+                                "コネクションをチェックしてください。", Toast.LENGTH_SHORT).show()
+                }
+            })
+            .setNotificationCancelable(false)
+            .build()
 
         mySharedPreferences = getSharedPreferences(myPREFERENCES, Context.MODE_PRIVATE)
         if(!mySharedPreferences!!.contains("email")){
