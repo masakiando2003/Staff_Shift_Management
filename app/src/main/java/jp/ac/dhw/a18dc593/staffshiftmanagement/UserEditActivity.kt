@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import ir.drax.netwatch.NetWatch
 import ir.drax.netwatch.cb.NetworkChangeReceiver_navigator
@@ -42,6 +43,8 @@ class UserEditActivity : AppCompatActivity() {
         Manifest.permission.CAMERA,
         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     private var avatarBase64: String? = null
+    private lateinit var auth: FirebaseAuth
+    private var oldUserEmail: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,12 +99,13 @@ class UserEditActivity : AppCompatActivity() {
                             (field == "email") -> {
                                 val userEmail =
                                     findViewById<TextView>(R.id.txtUserEmail)
-                                userEmail.text = child.value.toString()
+                                userEmail.text = value
+                                oldUserEmail = value
                             }
                             (field == "name") -> {
                                 val userNameDisplay =
                                     findViewById<TextView>(R.id.txtUserName)
-                                userNameDisplay.text = child.value.toString()
+                                userNameDisplay.text = value
                             }
                             (field == "password") -> {
                                 val userPassword =
@@ -172,7 +176,7 @@ class UserEditActivity : AppCompatActivity() {
                             val userCount = p0.childrenCount
                             if(userCount > 0){
                                 Toast.makeText(this@UserEditActivity,
-                                    "ユーザー: "+editUserName+"はデータベースに存在しています",
+                                    "ユーザー: $editUserName はデータベースに存在しています",
                                     Toast.LENGTH_LONG).show()
                             }
                             else {
@@ -180,12 +184,52 @@ class UserEditActivity : AppCompatActivity() {
                                     .child(oldUserName).removeValue()
                                 databaseReference.child("users")
                                     .child(editUserName).setValue(userData)
-                                Toast.makeText(this@UserEditActivity,
-                                    "ユーザー: "+editUserName+"を更新しました",
-                                    Toast.LENGTH_SHORT).show()
-                                val intentBack = Intent(this@UserEditActivity,
-                                    UserListActivity::class.java)
-                                startActivity(intentBack)
+                                Log.d(TAG, "editUserEmail: $editUserEmail," +
+                                        " oldUserEmail: $oldUserEmail")
+                                if(editUserEmail != oldUserEmail){
+                                    auth = FirebaseAuth.getInstance()
+                                    auth.createUserWithEmailAndPassword(editUserEmail,
+                                        editUserPassword)
+                                        .addOnCompleteListener { task2->
+                                            if (task2.isSuccessful) {
+                                                Log.d(TAG,
+                                                    "Create new user in FireBase " +
+                                                            "successfully!!")
+                                                val currentUser = auth.currentUser
+                                                Log.d(TAG,
+                                                    "Current User Email: " +
+                                                            "${currentUser!!.email}")
+                                                currentUser.delete()
+                                                    .addOnCompleteListener { task3->
+                                                        if (task3.isSuccessful) {
+                                                            Log.d(TAG,
+                                                                "Delete old user " +
+                                                                        "successfully!!")
+                                                            databaseReference
+                                                                .child("users")
+                                                                .child(editUserName)
+                                                                .setValue(userData)
+                                                            Toast.makeText(
+                                                                applicationContext,
+                                                                "ユーザー:  $editUserName " +
+                                                                        "を更新しました",
+                                                                Toast.LENGTH_SHORT).show()
+                                                            val intentBack = Intent(
+                                                                applicationContext,
+                                                                UserListActivity::class.java)
+                                                            startActivity(intentBack)
+                                                        } else {
+                                                            Log.d(TAG,
+                                                                "Delete old user " +
+                                                                        "failure...")
+                                                        }
+                                                    }
+                                            }
+                                            else{
+                                                Log.d(TAG, "Create new user failure...")
+                                            }
+                                        }
+                                }
                             }
                         }
                         override fun onCancelled(error: DatabaseError) {
@@ -193,11 +237,36 @@ class UserEditActivity : AppCompatActivity() {
                         }
                 })
             } else{
-                databaseReference.child("users").child(editUserName).setValue(userData)
-                Toast.makeText(this, "ユーザー: "+editUserName+"を更新しました",
-                    Toast.LENGTH_SHORT).show()
-                val intentBack = Intent(this, UserListActivity::class.java)
-                startActivity(intentBack)
+                if(editUserEmail != oldUserEmail){
+                    auth = FirebaseAuth.getInstance()
+                    auth.createUserWithEmailAndPassword(editUserEmail, editUserPassword)
+                        .addOnCompleteListener { task2->
+                            if (task2.isSuccessful) {
+                                Log.d(TAG, "Create new user in FireBase successfully!!")
+                                val currentUser = auth.currentUser
+                                Log.d(TAG, "Current User Email: ${currentUser!!.email}")
+                                currentUser.delete()
+                                    .addOnCompleteListener { task3->
+                                        if (task3.isSuccessful) {
+                                            Log.d(TAG, "Delete old user successfully!!")
+                                            databaseReference.child("users")
+                                                .child(editUserName).setValue(userData)
+                                            Toast.makeText(this,
+                                                "ユーザー: $editUserName を更新しました",
+                                                Toast.LENGTH_SHORT).show()
+                                            val intentBack = Intent(
+                                                this, UserListActivity::class.java)
+                                            startActivity(intentBack)
+                                        } else {
+                                            Log.d(TAG, "Delete old user failure...")
+                                        }
+                                    }
+                            }
+                            else{
+                                Log.d(TAG, "Create new user failure...")
+                            }
+                        }
+                }
             }
         }
 
