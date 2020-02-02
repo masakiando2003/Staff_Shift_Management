@@ -51,6 +51,9 @@ class UserSettingActivity : AppCompatActivity() {
         Toast.makeText(this, "少しお待ちください...",
             Toast.LENGTH_SHORT).show()
 
+        val txtUser = findViewById<TextView>(R.id.txtUserName)
+        txtUser.isEnabled = false
+
         val btnSelectImage = findViewById<Button>(R.id.btnSelectAvatar)
         val btnRemoveImage = findViewById<Button>(R.id.btnRemoveAvatar)
 

@@ -9,6 +9,7 @@ object Supplier {
         MainMenuItems("会社情報"),
         MainMenuItems("ユーザーリスト"),
         MainMenuItems("ユーザー登録"),
+        MainMenuItems("アカウント設定"),
         MainMenuItems("ログアウト")
     )
     var menu_items_user = listOf(
