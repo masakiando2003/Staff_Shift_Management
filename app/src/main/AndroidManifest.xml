@@ -27,6 +27,7 @@
         <activity android:name=".UserDetailActivity" />
         <activity android:name=".UserListActivity" />
         <activity android:name=".UserEditActivity" />
+        <activity android:name=".UserSettingActivity" />
         <activity android:name=".UserRegisterActivity" />
         <activity android:name=".LogInActivity" />
         <activity android:name=".ShiftDateActivity" />

@@ -51,6 +51,9 @@ class MainMenuItemsAdapter(val context:Context, private val menuItems: List<Main
                     (currentMenuItem.contains("ユーザー登録")) -> {
                         intent = Intent(context, UserRegisterActivity::class.java)
                     }
+                    (currentMenuItem.contains("アカウント設定")) -> {
+                        intent = Intent(context, UserSettingActivity::class.java)
+                    }
                     (currentItem.toString().contains("ログアウト")) -> {
                         intent = Intent(context, LogInActivity::class.java)
                     }

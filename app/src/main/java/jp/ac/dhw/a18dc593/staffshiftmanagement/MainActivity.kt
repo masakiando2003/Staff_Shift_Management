@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val myPREFERENCES = "MyPrefs"
     private var mySharedPreferences: SharedPreferences? = null
+    private var loginUserRole: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,10 @@ class MainActivity : AppCompatActivity() {
                 mySharedPreferences!!.getString("loginUserName",null)?.toString()
             val displayUserText = "ログインユーザー: $loginUserName"
             loginUserStr.text = displayUserText
+        }
+        if(mySharedPreferences!!.contains("loginUserRole")){
+            loginUserRole = mySharedPreferences!!.getString("loginUserRole",
+                null)?.toString()
         }
 
         auth = FirebaseAuth.getInstance()
@@ -75,8 +80,16 @@ class MainActivity : AppCompatActivity() {
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         mainMenuRecyclerView.layoutManager = layoutManager
 
-        val adapter = MainMenuItemsAdapter(this, Supplier.menu_items)
-        mainMenuRecyclerView.adapter = adapter
+        when {
+            (loginUserRole == "admin") -> {
+                val adapter = MainMenuItemsAdapter(this, Supplier.menu_items_admin)
+                mainMenuRecyclerView.adapter = adapter
+            }
+            else -> {
+                val adapter = MainMenuItemsAdapter(this, Supplier.menu_items_user)
+                mainMenuRecyclerView.adapter = adapter
+            }
+        }
 
         val itemDecoration = androidx.recyclerview.widget.DividerItemDecoration(
             this,
